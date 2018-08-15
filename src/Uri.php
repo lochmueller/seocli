@@ -3,6 +3,9 @@
 
 namespace SEOCLI;
 
+
+use League\Uri\Schemes\Http;
+
 class Uri {
 
 	protected $uri;
@@ -12,11 +15,15 @@ class Uri {
 	protected $infos = null;
 
 	public function __construct(string $uri, $depth = 0){
-		$this->uri = $uri;
+		$this->uri = Http::createFromString($uri);
 		$this->depth = $depth;
 	}	
 
 	public function __toString(){
+		return (string)$this->uri;
+	}
+
+	public function get(){
 		return $this->uri;
 	}
 
@@ -29,7 +36,7 @@ class Uri {
 	}
 
 	public function getDepth(){
-		$this->depth = $depth;
+		return $this->depth;
 	}
 
 }

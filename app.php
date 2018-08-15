@@ -17,7 +17,7 @@ $climate->arguments->add([
         'longPrefix'  => 'depth',
         'description' => 'The depth of the crawler',
         'required'    => false,
-        'defaultValue' => 2,
+        'defaultValue' => 1,
         'castTo' 		=> 'int',
     ],
 ]);

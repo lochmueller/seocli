@@ -3,11 +3,13 @@
 
 namespace SEOCLI;
 
+use League\Uri\Schemes\Http;
+
 class Worker extends Singleton {
 
 	static protected $uris = [];
 
-	static protected $depth = 2;
+	static protected $depth = 1;
 
 	public function add(Uri $uri){
 		self::$uris[] = $uri;
@@ -29,28 +31,58 @@ class Worker extends Singleton {
 				// $infos['header'] = $request->getHeader();
 
 
+				$parser = new \SEOCLI\Parser();
+				$parserResult = $parser->parseAll($uri, $request->getContent());
+
+
 				$uri->setInfos($infos);
 
-				//Create a new DOM document
-				$dom = new \DOMDocument;
+				if($uri->getDepth() < self::$depth) {
 
-				//Parse the HTML. The @ is used to suppress any parsing errors
-				//that will be thrown if the $html string isn't valid XHTML.
-				@$dom->loadHTML($request->getContent());
-
-				//Get all links. You could also use any other tag name here,
-				//like 'img' or 'table', to extract other tags.
-				$links = $dom->getElementsByTagName('a');
-
-				//Iterate over the extracted links and display their URLs
-				foreach ($links as $link){
-				    echo (string)$link->getAttribute('href')."\n";
+					$worker = \SEOCLI\Worker::getInstance();
+					foreach ($this->cleanupLinksForWorker($uri, $parserResult['links']) as $link) {	
+						$worker->add(new \SEOCLI\Uri($link, $uri->getDepth() + 1));
+					}
 				}
+
 
 				return true;
 			}
 		}
 		return false;
+	}
+
+	protected function cleanupLinksForWorker(Uri $uri, $links){
+		$result = [];
+
+		$alreadyQueued = array_map(function($uri){
+			return (string)$uri;
+		}, self::$uris);
+
+		foreach ($links as $link) {
+			try {
+				$checkUri = Http::createFromString($link);
+			} catch(\Exception $ex) {
+				continue;
+			}
+			if((string)$checkUri->getHost() === '') {
+				$checkUri = $checkUri->withHost($uri->get()->getHost());
+				$checkUri = $checkUri->withScheme($uri->get()->getScheme());
+			}
+			$checkUri = $checkUri->withFragment('');
+
+			if($uri->get()->getHost() !== $checkUri->getHost()) {
+				continue;
+			}
+
+			if(in_array((string)$checkUri, $alreadyQueued)) {
+				continue;
+			}
+
+			$result[] = (string)$checkUri;
+		}
+
+		return $result;
 	}
 
 
