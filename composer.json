@@ -1,0 +1,21 @@
+{
+    "name": "lochmueller/seocli",
+    "description": "SEO CLI Tool",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Tim Lochmüller",
+            "email": "tim@fruit-lab.de"
+        }
+    ],
+    "require": {
+        "league/climate": "^3.4",
+        "league/uri": "^5.3",
+        "guzzlehttp/guzzle": "^6.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "SEOCLI\\": "src/"
+        }
+    }
+}
