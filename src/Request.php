@@ -48,15 +48,16 @@ class Request {
     	$starttime = microtime(true);
 
 		$client = new \GuzzleHttp\Client();
-		$res = $client->request('GET', $this->uri->get());
+		$res = $client->request('GET', (string)$this->uri);
 		$stoptime  = microtime(true);
+
 		$this->result = [
 			'meta' => [
 				'statusCode' => $res->getStatusCode(),
 				'time' => floor(($stoptime - $starttime) * 1000),
 			],
 			'header' => $res->getHeaders(),
-			'content' => $res->getBody(),
+			'content' => (string)$res->getBody(),
 		];
 
 	}
