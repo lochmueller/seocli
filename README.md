@@ -1,0 +1,2 @@
+# seocli
+SEO CLI Tool
