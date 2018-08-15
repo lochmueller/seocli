@@ -45,8 +45,7 @@ class Worker extends Singleton {
 					}
 				}
 
-
-				return true;
+				return (string)$uri;
 			}
 		}
 		return false;
