@@ -1,23 +1,25 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace SEOCLI;
 
-class Parser {
-	
+class Parser
+{
+    public function parseAll(Uri $uri, $content)
+    {
+        $infos = [];
+        foreach ($this->getParser() as $key => $parser) {
+            $infos[$key] = $parser->parse($uri, $content);
+        }
 
-	public function parseAll(Uri $uri, $content){
-		$infos = [];
-		foreach ($this->getParser() as $key => $parser) {
-			$infos[$key] = $parser->parse( $uri, $content);
-		}
-		return $infos;
-	}
+        return $infos;
+    }
 
-	protected function getParser(){
-		return [
-			'links' => new \SEOCLI\Parser\Links(),
-		];
-	}
-	
-
+    protected function getParser()
+    {
+        return [
+            'links' => new \SEOCLI\Parser\Links(),
+        ];
+    }
 }

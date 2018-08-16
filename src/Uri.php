@@ -1,42 +1,47 @@
 <?php
 
+declare(strict_types = 1);
 
 namespace SEOCLI;
 
-
 use League\Uri\Schemes\Http;
 
-class Uri {
+class Uri
+{
+    protected $uri;
 
-	protected $uri;
+    protected $depth;
 
-	protected $depth;
+    protected $infos;
 
-	protected $infos = null;
+    public function __construct(string $uri, $depth = 0)
+    {
+        $this->uri = Http::createFromString($uri);
+        $this->depth = $depth;
+    }
 
-	public function __construct(string $uri, $depth = 0){
-		$this->uri = Http::createFromString($uri);
-		$this->depth = $depth;
-	}	
+    public function __toString()
+    {
+        return (string)$this->uri;
+    }
 
-	public function __toString(){
-		return (string)$this->uri;
-	}
+    public function get()
+    {
+        return $this->uri;
+    }
 
-	public function get(){
-		return $this->uri;
-	}
+    public function setInfos($infos)
+    {
+        $this->infos = $infos;
+    }
 
-	public function setInfos($infos){
-		$this->infos = $infos;
-	}
+    public function getInfos()
+    {
+        return $this->infos;
+    }
 
-	public function getInfos(){
-		return $this->infos;
-	}
-
-	public function getDepth(){
-		return $this->depth;
-	}
-
+    public function getDepth()
+    {
+        return $this->depth;
+    }
 }

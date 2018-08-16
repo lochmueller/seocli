@@ -1,107 +1,111 @@
 <?php
 
+declare(strict_types = 1);
 
 namespace SEOCLI;
 
 use League\Uri\Schemes\Http;
 
-class Worker extends Singleton {
+class Worker extends Singleton
+{
+    protected static $uris = [];
 
-	static protected $uris = [];
+    protected static $depth = 1;
 
-	static protected $depth = 1;
+    public function add(Uri $uri)
+    {
+        self::$uris[] = $uri;
+    }
 
-	public function add(Uri $uri){
-		self::$uris[] = $uri;
-	}
+    public function setDepth($depth)
+    {
+        self::$depth = $depth;
+    }
 
-	public function setDepth($depth){
-		self::$depth = $depth;
-	}
+    public function prefetchOne()
+    {
+        foreach (self::$uris as $key => $uri) {
+            if (null === $uri->getInfos()) {
+                $request = new \SEOCLI\Request($uri);
 
-	public function prefetchOne(){
-		foreach (self::$uris as $key => $uri) {
-			if($uri->getInfos() === null) {
+                $infos = (array)$request->getMeta();
+                $infos['contentSize'] = \mb_strlen($request->getContent());
 
-				
-				$request = new \SEOCLI\Request($uri);
+                $headers = $request->getHeader();
+                $infos['contentType'] = isset($headers['Content-Type']) ? \implode('', $headers['Content-Type']) : '';
+                // $infos['content'] = $request->getContent();
+                // $infos['header'] = $request->getHeader();
 
-				$infos = (array)$request->getMeta();
-				// $infos['content'] = $request->getContent();
-				// $infos['header'] = $request->getHeader();
+                $parser = new \SEOCLI\Parser();
+                $parserResult = $parser->parseAll($uri, $request->getContent());
 
+                $uri->setInfos($infos);
 
-				$parser = new \SEOCLI\Parser();
-				$parserResult = $parser->parseAll($uri, $request->getContent());
+                if ($uri->getDepth() < self::$depth) {
+                    $worker = \SEOCLI\Worker::getInstance();
+                    foreach ($this->cleanupLinksForWorker($uri, $parserResult['links']) as $link) {
+                        $worker->add(new \SEOCLI\Uri($link, $uri->getDepth() + 1));
+                        break;
+                    }
+                }
 
+                return (string)$uri;
+            }
+        }
 
-				$uri->setInfos($infos);
+        return false;
+    }
 
-				if($uri->getDepth() < self::$depth) {
+    public function getOpen()
+    {
+        return \array_filter(self::$uris, function (Uri $uri) {
+            return null === $uri->getInfos();
+        });
+    }
 
-					$worker = \SEOCLI\Worker::getInstance();
-					foreach ($this->cleanupLinksForWorker($uri, $parserResult['links']) as $link) {	
-						$worker->add(new \SEOCLI\Uri($link, $uri->getDepth() + 1));
-					}
-				}
+    public function getFetched()
+    {
+        return \array_filter(self::$uris, function (Uri $uri) {
+            return null !== $uri->getInfos();
+        });
+    }
 
-				return (string)$uri;
-			}
-		}
-		return false;
-	}
+    public function get()
+    {
+        return self::$uris;
+    }
 
-	protected function cleanupLinksForWorker(Uri $uri, $links){
-		$result = [];
+    protected function cleanupLinksForWorker(Uri $uri, $links)
+    {
+        $result = [];
 
-		$alreadyQueued = array_map(function($uri){
-			return (string)$uri;
-		}, self::$uris);
+        $alreadyQueued = \array_map(function ($uri) {
+            return (string)$uri;
+        }, self::$uris);
 
-		foreach ($links as $link) {
-			try {
-				$checkUri = Http::createFromString($link);
-			} catch(\Exception $ex) {
-				continue;
-			}
-			if((string)$checkUri->getHost() === '') {
-				$checkUri = $checkUri->withHost($uri->get()->getHost());
-				$checkUri = $checkUri->withScheme($uri->get()->getScheme());
-			}
-			$checkUri = $checkUri->withFragment('');
+        foreach ($links as $link) {
+            try {
+                $checkUri = Http::createFromString($link);
+            } catch (\Exception $ex) {
+                continue;
+            }
+            if ('' === (string)$checkUri->getHost()) {
+                $checkUri = $checkUri->withHost($uri->get()->getHost());
+                $checkUri = $checkUri->withScheme($uri->get()->getScheme());
+            }
+            $checkUri = $checkUri->withFragment('');
 
-			if($uri->get()->getHost() !== $checkUri->getHost()) {
-				continue;
-			}
+            if ($uri->get()->getHost() !== $checkUri->getHost()) {
+                continue;
+            }
 
-			if(in_array((string)$checkUri, $alreadyQueued)) {
-				continue;
-			}
+            if (\in_array((string)$checkUri, $alreadyQueued, true)) {
+                continue;
+            }
 
-			$result[] = (string)$checkUri;
-		}
+            $result[] = (string)$checkUri;
+        }
 
-		return $result;
-	}
-
-
-	public function getOpen(){
-		return array_filter(self::$uris, function(Uri $uri){
-			return $uri->getInfos() === null;
-		});
-	}
-
-	public function getFetched(){
-		return array_filter(self::$uris, function(Uri $uri){
-			return $uri->getInfos() !== null;
-		});
-	}
-
-	public function get(){
-		return self::$uris;
-	}
-
-	
-	
-
+        return $result;
+    }
 }
