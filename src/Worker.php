@@ -29,12 +29,24 @@ class Worker extends Singleton
                 $request = new \SEOCLI\Request($uri);
 
                 $infos = (array)$request->getMeta();
-                $infos['contentSize'] = \mb_strlen($request->getContent());
+                $content = $request->getContent();
+                $infos['contentSize'] = \mb_strlen($content);
 
                 $headers = $request->getHeader();
                 $infos['contentType'] = isset($headers['Content-Type']) ? \implode('', $headers['Content-Type']) : '';
                 // $infos['content'] = $request->getContent();
                 // $infos['header'] = $request->getHeader();
+
+                // var_dump(strip_tags($content));
+
+                // title, titleLength
+                // meta Description, metaDescription Length
+                // meta Keywords, metakeywords Length
+
+                // wordCount
+                // textRatio
+                // crawlDepth
+                // links
 
                 $parser = new \SEOCLI\Parser();
                 $parserResult = $parser->parseAll($uri, $request->getContent());
@@ -45,7 +57,6 @@ class Worker extends Singleton
                     $worker = \SEOCLI\Worker::getInstance();
                     foreach ($this->cleanupLinksForWorker($uri, $parserResult['links']) as $link) {
                         $worker->add(new \SEOCLI\Uri($link, $uri->getDepth() + 1));
-                        break;
                     }
                 }
 

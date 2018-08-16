@@ -61,7 +61,7 @@ class Request
         $this->result = [
             'meta' => [
                 'statusCode' => $res->getStatusCode(),
-                'time' => \floor(($stoptime - $starttime) * 1000),
+                'time' => \round($stoptime - $starttime, 2),
             ],
             'header' => $res->getHeaders(),
             'content' => (string)$res->getBody(),
