@@ -8,6 +8,7 @@ class Application
 {
     public function run()
     {
+        error_reporting(E_ALL);
         \pcntl_signal(SIGINT, [$this, 'signalHandler']);
         $climate = new \League\CLImate\CLImate();
         $climate->arguments->add([

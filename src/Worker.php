@@ -101,8 +101,8 @@ class Worker extends Singleton
                 continue;
             }
             if ('' === (string)$checkUri->getHost()) {
-                $checkUri = $checkUri->withHost($uri->get()->getHost());
-                $checkUri = $checkUri->withScheme($uri->get()->getScheme());
+                $checkUri = $checkUri->withPath('/'.ltrim($checkUri->getPath(), '/'));
+                $checkUri = $checkUri->withHost($uri->get()->getHost())->withScheme($uri->get()->getScheme());
             }
             $checkUri = $checkUri->withFragment('');
 
