@@ -43,7 +43,7 @@ class RobotsTxt
      */
     protected function getRobotsTxtContent(Uri $uri): string
     {
-        $robotsUri = new Uri($uri->get()->withQuery('')->withPath('/robots.txt'));
+        $robotsUri = new Uri((string)$uri->get()->withQuery('')->withPath('/robots.txt'));
 
         $request = new Request($robotsUri);
         $content = $request->getContent();
