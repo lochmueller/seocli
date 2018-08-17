@@ -9,7 +9,7 @@ class Request
     /**
      * URI.
      *
-     * @var \SEOCLI\URI
+     * @var Uri
      */
     protected $uri;
 
@@ -20,11 +20,14 @@ class Request
      */
     protected $result;
 
-    public function __construct(\SEOCLI\URI $uri)
+    public function __construct(Uri $uri)
     {
         $this->uri = $uri;
     }
 
+    /**
+     * @return mixed
+     */
     public function getHeader()
     {
         $this->fetchResult();
@@ -32,6 +35,9 @@ class Request
         return $this->result['header'];
     }
 
+    /**
+     * @return mixed
+     */
     public function getContent()
     {
         $this->fetchResult();
@@ -39,6 +45,9 @@ class Request
         return $this->result['content'];
     }
 
+    /**
+     * @return mixed
+     */
     public function getMeta()
     {
         $this->fetchResult();
@@ -46,25 +55,38 @@ class Request
         return $this->result['meta'];
     }
 
+    /**
+     * Fetch result.
+     */
     protected function fetchResult()
     {
         if (null !== $this->result) {
             return;
         }
 
-        $starttime = \microtime(true);
+        try {
+            $startTime = \microtime(true);
+            $client = new \GuzzleHttp\Client();
+            $res = $client->request('GET', (string)$this->uri);
+            $stopTime = \microtime(true);
 
-        $client = new \GuzzleHttp\Client();
-        $res = $client->request('GET', (string)$this->uri);
-        $stoptime = \microtime(true);
-
-        $this->result = [
-            'meta' => [
-                'statusCode' => $res->getStatusCode(),
-                'timeInSecods' => \round($stoptime - $starttime, 2),
-            ],
-            'header' => $res->getHeaders(),
-            'content' => (string)$res->getBody(),
-        ];
+            $this->result = [
+                'meta' => [
+                    'statusCode' => $res->getStatusCode(),
+                    'timeInSeconds' => \round($stopTime - $startTime, 2),
+                ],
+                'header' => $res->getHeaders(),
+                'content' => (string)$res->getBody(),
+            ];
+        } catch (\Exception $ex) {
+            $this->result = [
+                'meta' => [
+                    'statusCode' => 'XX',
+                    'timeInSecods' => \round($stopTime - $startTime, 2),
+                ],
+                'header' => [],
+                'content' => '',
+            ];
+        }
     }
 }

@@ -4,9 +4,15 @@ declare(strict_types = 1);
 
 namespace SEOCLI\Parser;
 
-class Links
+class Links implements PaserInterface
 {
-    public function parse(\SEOCLI\Uri $uri, $content)
+    /**
+     * @param \SEOCLI\Uri $uri
+     * @param string      $content
+     *
+     * @return array
+     */
+    public function parse(\SEOCLI\Uri $uri, string $content): array
     {
         //Create a new DOM document
         $dom = new \DOMDocument();

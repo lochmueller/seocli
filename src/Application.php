@@ -1,17 +1,53 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace SEOCLI;
 
+use League\CLImate\CLImate;
+
 class Application
 {
+    /**
+     * @var CLImate
+     */
+    protected $climate;
+
+    /**
+     * @throws \Exception
+     */
     public function run()
     {
-        \error_reporting(E_ALL);
-        \pcntl_signal(SIGINT, [$this, 'signalHandler']);
-        $climate = new \League\CLImate\CLImate();
-        $climate->arguments->add([
+        $this->init();
+        $this->setArguments();
+
+        $worker = Worker::getInstance();
+        $worker->setDepth($this->climate->arguments->get('depth'));
+        $worker->add(new Uri($this->climate->arguments->get('uri')));
+
+        $this->climate->out('Start fetching elements...');
+        $progress = $this->climate->progress()->total(\count($worker->get()));
+        $progress->current(0);
+        try {
+            while ($currentUri = $worker->prefetchOne()) {
+                \pcntl_signal_dispatch();
+                $progress->current(\count($worker->getFetched()), $currentUri);
+                $progress->total(\count($worker->get()));
+            }
+        } catch (InterruptException $ex) {
+            // Do nothing to display the output
+        }
+
+        // Output
+        $this->renderOutput($worker->getFetched());
+    }
+
+    /**
+     * @throws \Exception
+     */
+    protected function setArguments()
+    {
+        $this->climate->arguments->add([
             'uri' => [
                 'prefix' => 'u',
                 'longPrefix' => 'uri',
@@ -30,56 +66,71 @@ class Application
         ]);
 
         try {
-            $climate->arguments->parse();
+            $this->climate->arguments->parse();
         } catch (\Exception $ex) {
-            $climate->usage();
+            $this->climate->usage();
             die();
         }
+    }
 
-        $worker = \SEOCLI\Worker::getInstance();
-        $worker->setDepth($climate->arguments->get('depth'));
-        $worker->add(new \SEOCLI\Uri($climate->arguments->get('uri')));
-
-        $climate->out('Start fetching elements...');
-        $progress = $climate->progress()->total(\count($worker->get()));
-        $progress->current(0);
-        try {
-            while ($currentUri = $worker->prefetchOne()) {
-                \pcntl_signal_dispatch();
-                $progress->current(\count($worker->getFetched()), $currentUri);
-                $progress->total(\count($worker->get()));
-            }
-        } catch (InterruptException $ex) {
-            // Do nothing to display the output
-        }
-
+    /**
+     * @param array $uris
+     */
+    protected function renderOutput(array $uris)
+    {
         // Output
         $table = [];
-        foreach ($worker->getFetched() as $uri) {
-            $table[] = ['uri' => (string) $uri] + $uri->getInfos();
+        foreach ($uris as $uri) {
+            /* @var $uri Uri */
+            $table[] = ['uri' => (string)$uri] + $uri->getInfo();
         }
 
-        usort($table, function ($a, $b) {
-            return strcmp($a['uri'], $b['uri']);
+        \usort($table, function ($a, $b) {
+            return \strcmp($a['uri'], $b['uri']);
         });
 
-        $climate->blue('All result:');
-        $climate->table($table);
+        $this->climate->blue('All result:');
+        $this->climate->table($table);
 
-
-        usort($table, function ($a, $b) {
-            return $a['timeInSecods'] < $b['timeInSecods'];
+        $this->renderTopList('Slowest pages', $table, function ($a, $b) {
+            return $a['timeInSeconds'] < $b['timeInSeconds'];
         });
 
-        $climate->red('Top 5 slowest pages:');
-        $climate->table(array_slice($table, 0, 5));
-
-
-        usort($table, function ($a, $b) {
+        $this->renderTopList('Biggest pages', $table, function ($a, $b) {
             return $a['documentSizeInMb'] < $b['documentSizeInMb'];
         });
-        $climate->red('Top 5 biggest pages:');
-        $climate->table(array_slice($table, 0, 5));
+
+        $this->renderTopList('Shortest title', $table, function ($a, $b) {
+            return $a['titleLength'] > $b['titleLength'];
+        });
+
+        $this->renderTopList('Longest title', $table, function ($a, $b) {
+            return $a['titleLength'] < $b['titleLength'];
+        });
+
+        $this->renderTopList('Lowest textRatio', $table, function ($a, $b) {
+            return $a['textRatio'] > $b['textRatio'];
+        });
+    }
+
+    protected function init()
+    {
+        \error_reporting(E_ALL);
+        \pcntl_signal(SIGINT, [$this, 'signalHandler']);
+        $this->climate = new CLImate();
+    }
+
+    /**
+     * @param $label
+     * @param $data
+     * @param callable $sortFunction
+     */
+    protected function renderTopList($label, $data, callable $sortFunction)
+    {
+        $limit = 5;
+        \usort($data, $sortFunction);
+        $this->climate->red('Top ' . $limit . ': ' . $label);
+        $this->climate->table(\array_slice($data, 0, $limit));
     }
 
     /**

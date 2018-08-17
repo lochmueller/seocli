@@ -4,42 +4,33 @@ declare(strict_types = 1);
 
 namespace SEOCLI;
 
-abstract class Singleton
+trait Singleton
 {
     /**
-     * instance.
+     * Instance.
      *
-     * Statische Variable, um die aktuelle (einzige!) Instanz dieser Klasse zu halten
-     *
-     * @var Singleton
+     * @var static
      */
     protected static $_instance = null;
 
     /**
-     * constructor.
-     *
-     * externe Instanzierung verbieten
+     * Constructor.
      */
     protected function __construct()
     {
     }
 
     /**
-     * clone.
-     *
-     * Kopieren der Instanz von aussen ebenfalls verbieten
+     * Clone.
      */
     protected function __clone()
     {
     }
 
     /**
-     * get instance.
+     * Get instance.
      *
-     * Falls die einzige Instanz noch nicht existiert, erstelle sie
-     * Gebe die einzige Instanz dann zurück
-     *
-     * @return Singleton
+     * @return static
      */
     public static function getInstance()
     {

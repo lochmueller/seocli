@@ -9,6 +9,9 @@
         }
     ],
     "require": {
+        "php": ">=7.0",
+        "ext-pcntl": "*",
+        "ext-dom": "*",
         "league/climate": "^3.4",
         "league/uri": "^5.3",
         "guzzlehttp/guzzle": "^6.3",

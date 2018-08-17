@@ -4,10 +4,12 @@ declare(strict_types = 1);
 
 namespace SEOCLI;
 
-use League\Uri\Schemes\Http;
+use League\Uri\Http;
 
-class Worker extends Singleton
+class Worker
 {
+    use Singleton;
+
     protected static $uris = [];
 
     protected static $depth = 1;
@@ -25,16 +27,17 @@ class Worker extends Singleton
     public function prefetchOne()
     {
         foreach (self::$uris as $key => $uri) {
-            if (null === $uri->getInfos()) {
-                $request = new \SEOCLI\Request($uri);
+            /** @var $uri Uri */
+            if (null === $uri->getInfo()) {
+                $request = new Request($uri);
 
-                $infos = (array)$request->getMeta();
+                $info = (array)$request->getMeta();
                 $content = $request->getContent();
-                $infos['crawlDepth'] = $uri->getDepth();
-                $infos['documentSizeInMb'] = \round(\mb_strlen($content) / 1024 / 1024, 2);
+                $info['crawlDepth'] = $uri->getDepth();
+                $info['documentSizeInMb'] = \round(\mb_strlen($content) / 1024 / 1024, 2);
 
                 $headers = $request->getHeader();
-                $infos['contentType'] = isset($headers['Content-Type']) ? \implode('', $headers['Content-Type']) : '';
+                $info['contentType'] = isset($headers['Content-Type']) ? \implode('', $headers['Content-Type']) : '';
                 // $infos['content'] = $request->getContent();
                 // $infos['header'] = $request->getHeader();
 
@@ -44,22 +47,22 @@ class Worker extends Singleton
                 // wordCount
                 // textRatio
 
-                $parser = new \SEOCLI\Parser();
+                $parser = new Parser();
                 $parserResult = $parser->parseAll($uri, $request->getContent());
 
-                $infos['title'] = $parserResult['title']['text'];
-                $infos['titleLength'] = $parserResult['title']['length'];
-                $infos['links'] = \count($parserResult['links']);
+                $info['title'] = $parserResult['title']['text'];
+                $info['titleLength'] = $parserResult['title']['length'];
+                $info['links'] = \count($parserResult['links']);
 
-                $infos['wordCount'] = $parserResult['text']['wordCount'];
-                $infos['textRatio'] = $parserResult['text']['textRatio'];
+                $info['wordCount'] = $parserResult['text']['wordCount'];
+                $info['textRatio'] = $parserResult['text']['textRatio'];
 
-                $uri->setInfos($infos);
+                $uri->setInfo($info);
 
                 if ($uri->getDepth() < self::$depth) {
-                    $worker = \SEOCLI\Worker::getInstance();
+                    $worker = self::getInstance();
                     foreach ($this->cleanupLinksForWorker($uri, $parserResult['links']) as $link) {
-                        $worker->add(new \SEOCLI\Uri($link, $uri->getDepth() + 1));
+                        $worker->add(new Uri($link, $uri->getDepth() + 1));
                     }
                 }
 
@@ -73,14 +76,14 @@ class Worker extends Singleton
     public function getOpen()
     {
         return \array_filter(self::$uris, function (Uri $uri) {
-            return null === $uri->getInfos();
+            return null === $uri->getInfo();
         });
     }
 
     public function getFetched()
     {
         return \array_filter(self::$uris, function (Uri $uri) {
-            return null !== $uri->getInfos();
+            return null !== $uri->getInfo();
         });
     }
 
@@ -98,7 +101,6 @@ class Worker extends Singleton
         }, self::$uris);
 
         foreach ($links as $link) {
-
             try {
                 $checkUri = Http::createFromString($link);
             } catch (\Exception $ex) {
@@ -121,6 +123,6 @@ class Worker extends Singleton
             $result[] = (string)$checkUri;
         }
 
-        return array_unique($result);
+        return \array_unique($result);
     }
 }

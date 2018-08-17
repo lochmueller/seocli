@@ -4,9 +4,15 @@ declare(strict_types = 1);
 
 namespace SEOCLI\Parser;
 
-class Text
+class Text implements PaserInterface
 {
-    public function parse(\SEOCLI\Uri $uri, $content)
+    /**
+     * @param \SEOCLI\Uri $uri
+     * @param string      $content
+     *
+     * @return array
+     */
+    public function parse(\SEOCLI\Uri $uri, string $content): array
     {
         $text = \preg_replace('/<script(.*?)<\/script>/is', '', $content);
         $text = \strip_tags($text);
