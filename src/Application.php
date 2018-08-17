@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SEOCLI;
 
@@ -54,12 +54,32 @@ class Application
         }
 
         // Output
-        $climate->out('Result...');
         $table = [];
         foreach ($worker->getFetched() as $uri) {
-            $table[] = ['uri' => (string)$uri] + $uri->getInfos();
+            $table[] = ['uri' => (string) $uri] + $uri->getInfos();
         }
+
+        usort($table, function ($a, $b) {
+            return strcmp($a['uri'], $b['uri']);
+        });
+
+        $climate->blue('All result:');
         $climate->table($table);
+
+
+        usort($table, function ($a, $b) {
+            return $a['timeInSecods'] < $b['timeInSecods'];
+        });
+
+        $climate->red('Top 5 slowest pages:');
+        $climate->table(array_slice($table, 0, 5));
+
+
+        usort($table, function ($a, $b) {
+            return $a['documentSizeInMb'] < $b['documentSizeInMb'];
+        });
+        $climate->red('Top 5 biggest pages:');
+        $climate->table(array_slice($table, 0, 5));
     }
 
     /**

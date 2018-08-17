@@ -98,6 +98,7 @@ class Worker extends Singleton
         }, self::$uris);
 
         foreach ($links as $link) {
+
             try {
                 $checkUri = Http::createFromString($link);
             } catch (\Exception $ex) {
@@ -120,6 +121,6 @@ class Worker extends Singleton
             $result[] = (string)$checkUri;
         }
 
-        return $result;
+        return array_unique($result);
     }
 }
