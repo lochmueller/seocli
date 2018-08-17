@@ -39,7 +39,7 @@ abstract class Singleton
      * Falls die einzige Instanz noch nicht existiert, erstelle sie
      * Gebe die einzige Instanz dann zurück
      *
-     * @return   Singleton
+     * @return Singleton
      */
     public static function getInstance()
     {

@@ -20,6 +20,9 @@ class Parser
     {
         return [
             'links' => new \SEOCLI\Parser\Links(),
+            'headlines' => new \SEOCLI\Parser\Headlines(),
+            'title' => new \SEOCLI\Parser\Title(),
+            'text' => new \SEOCLI\Parser\Text(),
         ];
     }
 }

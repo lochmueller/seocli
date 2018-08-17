@@ -30,26 +30,29 @@ class Worker extends Singleton
 
                 $infos = (array)$request->getMeta();
                 $content = $request->getContent();
-                $infos['contentSize'] = \mb_strlen($content);
+                $infos['crawlDepth'] = $uri->getDepth();
+                $infos['documentSizeInMb'] = \round(\mb_strlen($content) / 1024 / 1024, 2);
 
                 $headers = $request->getHeader();
                 $infos['contentType'] = isset($headers['Content-Type']) ? \implode('', $headers['Content-Type']) : '';
                 // $infos['content'] = $request->getContent();
                 // $infos['header'] = $request->getHeader();
 
-                // var_dump(strip_tags($content));
-
-                // title, titleLength
                 // meta Description, metaDescription Length
                 // meta Keywords, metakeywords Length
 
                 // wordCount
                 // textRatio
-                // crawlDepth
-                // links
 
                 $parser = new \SEOCLI\Parser();
                 $parserResult = $parser->parseAll($uri, $request->getContent());
+
+                $infos['title'] = $parserResult['title']['text'];
+                $infos['titleLength'] = $parserResult['title']['length'];
+                $infos['links'] = \count($parserResult['links']);
+
+                $infos['wordCount'] = $parserResult['text']['wordCount'];
+                $infos['textRatio'] = $parserResult['text']['textRatio'];
 
                 $uri->setInfos($infos);
 
@@ -60,7 +63,7 @@ class Worker extends Singleton
                     }
                 }
 
-                return (string)$uri;
+                return (string)$uri . ' (' . $uri->getDepth() . ')';
             }
         }
 
@@ -101,7 +104,7 @@ class Worker extends Singleton
                 continue;
             }
             if ('' === (string)$checkUri->getHost()) {
-                $checkUri = $checkUri->withPath('/'.ltrim($checkUri->getPath(), '/'));
+                $checkUri = $checkUri->withPath('/' . \ltrim($checkUri->getPath(), '/'));
                 $checkUri = $checkUri->withHost($uri->get()->getHost())->withScheme($uri->get()->getScheme());
             }
             $checkUri = $checkUri->withFragment('');
