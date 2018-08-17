@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SEOCLI;
 
@@ -24,16 +24,10 @@ class RobotsTxt
     {
         $host = $uri->get()->getHost();
         if (!isset($robotsObjects[$host])) {
-            $content = $this->getRobotsTxtContent($uri);
-            $robotsObjects[$host] = new RobotsTxtParser($content);
+            $robotsObjects[$host] = new RobotsTxtParser($this->getRobotsTxtContent($uri));
             $robotsObjects[$host]->setUserAgent(Request::USER_AGENT);
         }
-
-        if ($robotsObjects[$host]->isDisallowed($uri->get()->getPath())) {
-            return 'XX';
-        }
-
-        return 'OK';
+        return $robotsObjects[$host]->isDisallowed($uri->get()->getPath()) ? 'XX' : 'OK';
     }
 
     /**
@@ -43,11 +37,6 @@ class RobotsTxt
      */
     protected function getRobotsTxtContent(Uri $uri): string
     {
-        $robotsUri = new Uri((string)$uri->get()->withQuery('')->withPath('/robots.txt'));
-
-        $request = new Request($robotsUri);
-        $content = $request->getContent();
-
-        return $content;
+        return (string) (new Request(new Uri((string) $uri->get()->withQuery('')->withPath('/robots.txt'))))->getContent();
     }
 }
