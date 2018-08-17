@@ -15,7 +15,8 @@
         "league/climate": "^3.4",
         "league/uri": "^5.3",
         "guzzlehttp/guzzle": "^6.3",
-        "paquettg/php-html-parser": "^1.7"
+        "paquettg/php-html-parser": "^1.7",
+        "t1gor/robots-txt-parser": "^0.2.4"
     },
     "autoload": {
         "psr-4": {

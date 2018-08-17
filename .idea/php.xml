@@ -35,6 +35,8 @@
       <path value="$PROJECT_DIR$/vendor/league/uri-components" />
       <path value="$PROJECT_DIR$/vendor/paquettg/php-html-parser" />
       <path value="$PROJECT_DIR$/vendor/paquettg/string-encode" />
+      <path value="$PROJECT_DIR$/vendor/t1gor/robots-txt-parser" />
+      <path value="$PROJECT_DIR$/vendor/vipnytt/useragentparser" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7" />

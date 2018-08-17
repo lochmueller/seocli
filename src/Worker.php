@@ -57,6 +57,9 @@ class Worker
                 $info['wordCount'] = $parserResult['text']['wordCount'];
                 $info['textRatio'] = $parserResult['text']['textRatio'];
 
+                $robotsTxt = new RobotsTxt();
+                $info['robotsTxt'] = $robotsTxt->status($uri);
+
                 $uri->setInfo($info);
 
                 if ($uri->getDepth() < self::$depth) {

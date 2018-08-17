@@ -17,10 +17,12 @@ class Text implements PaserInterface
         $text = \preg_replace('/<script(.*?)<\/script>/is', '', $content);
         $text = \strip_tags($text);
 
+        $contentLength = \mb_strlen($content);
+
         return [
             'text' => $text,
             'wordCount' => \str_word_count($text),
-            'textRatio' => \round(\mb_strlen($text) * 100 / \mb_strlen($content), 2),
+            'textRatio' => \round($contentLength ? \mb_strlen($text) * 100 / $contentLength : 0, 2),
         ];
     }
 }
