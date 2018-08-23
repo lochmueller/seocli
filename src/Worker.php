@@ -6,24 +6,42 @@ namespace SEOCLI;
 
 use League\Uri\Http;
 
+/**
+ * Worker.
+ */
 class Worker
 {
     use Singleton;
 
+    /**
+     * @var array
+     */
     protected static $uris = [];
 
+    /**
+     * @var int
+     */
     protected static $depth = 1;
 
-    public function add(Uri $uri)
+    /**
+     * @param Uri $uri
+     */
+    public function add(Uri $uri): void
     {
         self::$uris[] = $uri;
     }
 
-    public function setDepth($depth)
+    /**
+     * @param int $depth
+     */
+    public function setDepth(int $depth): void
     {
         self::$depth = $depth;
     }
 
+    /**
+     * @return bool|string
+     */
     public function prefetchOne()
     {
         foreach (self::$uris as $key => $uri) {
@@ -76,6 +94,9 @@ class Worker
         return false;
     }
 
+    /**
+     * @return array
+     */
     public function getOpen()
     {
         return \array_filter(self::$uris, function (Uri $uri) {
@@ -83,6 +104,9 @@ class Worker
         });
     }
 
+    /**
+     * @return array
+     */
     public function getFetched()
     {
         return \array_filter(self::$uris, function (Uri $uri) {
@@ -90,12 +114,21 @@ class Worker
         });
     }
 
+    /**
+     * @return array
+     */
     public function get()
     {
         return self::$uris;
     }
 
-    protected function cleanupLinksForWorker(Uri $uri, $links)
+    /**
+     * @param Uri $uri
+     * @param $links
+     *
+     * @return array
+     */
+    protected function cleanupLinksForWorker(Uri $uri, $links): array
     {
         $result = [];
 

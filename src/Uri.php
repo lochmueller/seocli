@@ -20,7 +20,7 @@ class Uri
      *
      * @var int
      */
-    protected $depth;
+    protected $depth = 0;
 
     /**
      * Info.
@@ -35,7 +35,7 @@ class Uri
      * @param string $uri
      * @param int    $depth
      */
-    public function __construct(string $uri, $depth = 0)
+    public function __construct(string $uri, int $depth = 0)
     {
         $this->uri = Http::createFromString($uri);
         $this->depth = $depth;
@@ -60,7 +60,7 @@ class Uri
     /**
      * @return array
      */
-    public function getInfo()
+    public function getInfo(): ?array
     {
         return $this->info;
     }
@@ -76,7 +76,7 @@ class Uri
     /**
      * @return int
      */
-    public function getDepth()
+    public function getDepth(): int
     {
         return $this->depth;
     }

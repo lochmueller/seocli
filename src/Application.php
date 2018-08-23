@@ -14,38 +14,61 @@ class Application
     protected $climate;
 
     /**
-     * @throws \Exception
+     * Application constructor.
      */
-    public function run()
+    public function __construct()
     {
-        $this->init();
-        $this->setArguments();
+        \error_reporting(E_ALL);
+        \pcntl_signal(SIGINT, [$this, 'signalHandler']);
+        $this->climate = new CLImate();
+    }
 
+    public function run(): void
+    {
+        try {
+            $this->setArguments();
+            $worker = $this->getFinishedWorker();
+            $this->renderOutput($worker->getFetched());
+        } catch (\Exception $ex) {
+            $this->climate->error($ex->getMessage());
+        }
+    }
+
+    /**
+     * @return Worker
+     */
+    protected function getFinishedWorker(): Worker
+    {
         $worker = Worker::getInstance();
         $worker->setDepth($this->climate->arguments->get('depth'));
         $worker->add(new Uri($this->climate->arguments->get('uri')));
 
-        $this->climate->out('Start fetching elements...');
-        $progress = $this->climate->progress()->total(\count($worker->get()));
-        $progress->current(0);
+        $format = $this->climate->arguments->get('format');
+        if ('txt' === $format) {
+            $this->climate->out('Start fetching elements...');
+
+            $progress = $this->climate->progress(\count($worker->get()));
+            $progress->current(0);
+        }
         try {
             while ($currentUri = $worker->prefetchOne()) {
                 \pcntl_signal_dispatch();
-                $progress->current(\count($worker->getFetched()), $currentUri);
-                $progress->total(\count($worker->get()));
+                if ('txt' === $format) {
+                    $progress->current(\count($worker->getFetched()), $currentUri);
+                    $progress->total(\count($worker->get()));
+                }
             }
         } catch (InterruptException $ex) {
             // Do nothing to display the output
         }
 
-        // Output
-        $this->renderOutput($worker->getFetched());
+        return $worker;
     }
 
     /**
      * @throws \Exception
      */
-    protected function setArguments()
+    protected function setArguments(): void
     {
         $this->climate->arguments->add([
             'uri' => [
@@ -63,6 +86,14 @@ class Application
                 'defaultValue' => 1,
                 'castTo' => 'int',
             ],
+            'format' => [
+                'prefix' => 'f',
+                'longPrefix' => 'format',
+                'description' => 'The format of the output [txt,json,xml]',
+                'required' => false,
+                'defaultValue' => 'txt',
+                'castTo' => 'string',
+            ],
         ]);
 
         try {
@@ -76,9 +107,11 @@ class Application
     /**
      * @param array $uris
      */
-    protected function renderOutput(array $uris)
+    protected function renderOutput(array $uris): void
     {
+        $format = $this->climate->arguments->get('format');
         // Output
+
         $table = [];
         foreach ($uris as $uri) {
             /* @var $uri Uri */
@@ -113,19 +146,12 @@ class Application
         });
     }
 
-    protected function init()
-    {
-        \error_reporting(E_ALL);
-        \pcntl_signal(SIGINT, [$this, 'signalHandler']);
-        $this->climate = new CLImate();
-    }
-
     /**
      * @param $label
      * @param $data
      * @param callable $sortFunction
      */
-    protected function renderTopList($label, $data, callable $sortFunction)
+    protected function renderTopList($label, $data, callable $sortFunction): void
     {
         $limit = 5;
         \usort($data, $sortFunction);
@@ -140,7 +166,7 @@ class Application
      *
      * @throws InterruptException
      */
-    protected function signalHandler(int $signal)
+    protected function signalHandler(int $signal): void
     {
         throw new InterruptException('Trigger Signal: ' . $signal);
     }

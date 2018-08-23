@@ -33,7 +33,7 @@ class Parser
      *
      * @return array
      */
-    protected function getParser()
+    protected function getParser(): array
     {
         return [
             'links' => new Links(),
