@@ -1,3 +1,4 @@
 /vendor/
+/build/
 /.idea/workspace.xml
 /.php_cs.cache

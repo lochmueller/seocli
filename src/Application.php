@@ -23,6 +23,9 @@ class Application
         $this->climate = new CLImate();
     }
 
+    /**
+     *
+     */
     public function run(): void
     {
         try {
