@@ -4,12 +4,13 @@ declare(strict_types = 1);
 
 namespace SEOCLI;
 
-use League\CLImate\CLImate;
+use SEOCLI\Output\OutputInterface;
+use SEOCLI\Output\Text;
 
 class Application
 {
     /**
-     * @var CLImate
+     * @var Cli
      */
     protected $climate;
 
@@ -20,7 +21,7 @@ class Application
     {
         \error_reporting(E_ALL);
         \pcntl_signal(SIGINT, [$this, 'signalHandler']);
-        $this->climate = new CLImate();
+        $this->climate = Cli::getInstance();
     }
 
     public function run(): void
@@ -44,7 +45,7 @@ class Application
         $worker->add(new Uri($this->climate->arguments->get('uri')));
 
         $format = $this->climate->arguments->get('format');
-        if ('txt' === $format) {
+        if ('text' === $format) {
             $this->climate->out('Start fetching elements...');
 
             $progress = $this->climate->progress(\count($worker->get()));
@@ -53,7 +54,7 @@ class Application
         try {
             while ($currentUri = $worker->prefetchOne()) {
                 \pcntl_signal_dispatch();
-                if ('txt' === $format) {
+                if ('text' === $format) {
                     $progress->current(\count($worker->getFetched()), $currentUri);
                     $progress->total(\count($worker->get()));
                 }
@@ -89,9 +90,9 @@ class Application
             'format' => [
                 'prefix' => 'f',
                 'longPrefix' => 'format',
-                'description' => 'The format of the output [txt,json,xml]',
+                'description' => 'The format of the output [text,json,xml]',
                 'required' => false,
-                'defaultValue' => 'txt',
+                'defaultValue' => 'text',
                 'castTo' => 'string',
             ],
             'topCount' => [
@@ -118,6 +119,14 @@ class Application
     protected function renderOutput(array $uris): void
     {
         $format = $this->climate->arguments->get('format');
+
+        $rendererName = Text::class;
+        if (\class_exists('SEOCLI\\Output\\' . \ucfirst(\mb_strtolower($format)))) {
+            $rendererName = 'SEOCLI\\Output\\' . \ucfirst(\mb_strtolower($format));
+        }
+        /** @var OutputInterface $renderer */
+        $renderer = new $rendererName();
+        //echo $renderer->render();
         // Output
 
         $table = [];
@@ -133,25 +142,28 @@ class Application
         $this->climate->blue('All result ' . \count($table) . ':');
         $this->climate->table($table);
 
-        $this->renderTopList('Slowest pages', $table, function ($a, $b) {
-            return $a['timeInSeconds'] < $b['timeInSeconds'];
-        });
+        $limit = (int)$this->climate->arguments->get('topCount');
+        if ($limit) {
+            $this->renderTopList('Slowest pages', $table, function ($a, $b) {
+                return $a['timeInSeconds'] < $b['timeInSeconds'];
+            });
 
-        $this->renderTopList('Biggest pages', $table, function ($a, $b) {
-            return $a['documentSizeInMb'] < $b['documentSizeInMb'];
-        });
+            $this->renderTopList('Biggest pages', $table, function ($a, $b) {
+                return $a['documentSizeInMb'] < $b['documentSizeInMb'];
+            });
 
-        $this->renderTopList('Shortest title', $table, function ($a, $b) {
-            return $a['titleLength'] > $b['titleLength'];
-        });
+            $this->renderTopList('Shortest title', $table, function ($a, $b) {
+                return $a['titleLength'] > $b['titleLength'];
+            });
 
-        $this->renderTopList('Longest title', $table, function ($a, $b) {
-            return $a['titleLength'] < $b['titleLength'];
-        });
+            $this->renderTopList('Longest title', $table, function ($a, $b) {
+                return $a['titleLength'] < $b['titleLength'];
+            });
 
-        $this->renderTopList('Lowest textRatio', $table, function ($a, $b) {
-            return $a['textRatio'] > $b['textRatio'];
-        });
+            $this->renderTopList('Lowest textRatio', $table, function ($a, $b) {
+                return $a['textRatio'] > $b['textRatio'];
+            });
+        }
     }
 
     /**

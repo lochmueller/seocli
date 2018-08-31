@@ -35,10 +35,10 @@
       <path value="$PROJECT_DIR$/vendor/league/uri-components" />
       <path value="$PROJECT_DIR$/vendor/paquettg/php-html-parser" />
       <path value="$PROJECT_DIR$/vendor/paquettg/string-encode" />
-      <path value="$PROJECT_DIR$/vendor/t1gor/robots-txt-parser" />
-      <path value="$PROJECT_DIR$/vendor/vipnytt/useragentparser" />
       <path value="$PROJECT_DIR$/vendor/phpmetrics/phpmetrics" />
       <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
+      <path value="$PROJECT_DIR$/vendor/vipnytt/useragentparser" />
+      <path value="$PROJECT_DIR$/vendor/t1gor/robots-txt-parser" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />

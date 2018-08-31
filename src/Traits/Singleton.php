@@ -9,12 +9,7 @@ namespace SEOCLI\Traits;
  */
 trait Singleton
 {
-    /**
-     * Instance.
-     *
-     * @var static
-     */
-    protected static $_instance = null;
+    use SingletonInstance;
 
     /**
      * Constructor.
@@ -28,19 +23,5 @@ trait Singleton
      */
     protected function __clone()
     {
-    }
-
-    /**
-     * Get instance.
-     *
-     * @return static
-     */
-    public static function getInstance()
-    {
-        if (null === static::$_instance) {
-            static::$_instance = new static();
-        }
-
-        return static::$_instance;
     }
 }
