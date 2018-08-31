@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace SEOCLI\Parser;
 
 /**
- * Class Headlines
+ * Class Headlines.
  */
 class Headlines implements PaserInterface
 {

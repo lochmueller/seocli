@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace SEOCLI;
 
 use League\Uri\Http;
+use SEOCLI\Traits\Singleton;
 
 /**
  * Worker.

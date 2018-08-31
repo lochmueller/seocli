@@ -23,9 +23,6 @@ class Application
         $this->climate = new CLImate();
     }
 
-    /**
-     *
-     */
     public function run(): void
     {
         try {
@@ -97,6 +94,14 @@ class Application
                 'defaultValue' => 'txt',
                 'castTo' => 'string',
             ],
+            'topCount' => [
+                'prefix' => 't',
+                'longPrefix' => 'top-count',
+                'description' => 'The number of items in the top lists [0=disable]',
+                'required' => false,
+                'defaultValue' => 5,
+                'castTo' => 'int',
+            ],
         ]);
 
         try {
@@ -125,7 +130,7 @@ class Application
             return \strcmp($a['uri'], $b['uri']);
         });
 
-        $this->climate->blue('All result:');
+        $this->climate->blue('All result ' . \count($table) . ':');
         $this->climate->table($table);
 
         $this->renderTopList('Slowest pages', $table, function ($a, $b) {
@@ -156,7 +161,7 @@ class Application
      */
     protected function renderTopList($label, $data, callable $sortFunction): void
     {
-        $limit = 5;
+        $limit = (int)$this->climate->arguments->get('topCount');
         \usort($data, $sortFunction);
         $this->climate->red('Top ' . $limit . ': ' . $label);
         $this->climate->table(\array_slice($data, 0, $limit));

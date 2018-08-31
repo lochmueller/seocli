@@ -5,15 +5,14 @@ declare(strict_types = 1);
 namespace SEOCLI;
 
 use RobotsTxtParser;
+use SEOCLI\Traits\Cache;
 
+/**
+ * Class RobotsTxt.
+ */
 class RobotsTxt
 {
-    /**
-     * Robots txt objects.
-     *
-     * @var array
-     */
-    protected $robotsObjects = [];
+    use Cache;
 
     /**
      * @param Uri $uri
@@ -23,12 +22,15 @@ class RobotsTxt
     public function status(Uri $uri): string
     {
         $host = $uri->get()->getHost();
-        if (!isset($robotsObjects[$host])) {
-            $robotsObjects[$host] = new RobotsTxtParser($this->getRobotsTxtContent($uri));
-            $robotsObjects[$host]->setUserAgent(Request::USER_AGENT);
-        }
+        $parser = $this->getCache($host, function () use ($uri) {
+            $robotsTxt = new self();
+            $parser = new RobotsTxtParser($robotsTxt->getRobotsTxtContent($uri));
+            $parser->setUserAgent(Request::USER_AGENT);
 
-        return $robotsObjects[$host]->isDisallowed($uri->get()->getPath()) ? 'XX' : 'OK';
+            return $parser;
+        });
+
+        return $parser->isDisallowed($uri->get()->getPath()) ? 'XX' : 'OK';
     }
 
     /**
@@ -36,7 +38,7 @@ class RobotsTxt
      *
      * @return string
      */
-    protected function getRobotsTxtContent(Uri $uri): string
+    public function getRobotsTxtContent(Uri $uri): string
     {
         return (string)(new Request(new Uri((string)$uri->get()->withQuery('')->withPath('/robots.txt'))))->getContent();
     }
