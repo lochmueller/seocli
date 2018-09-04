@@ -1,9 +1,16 @@
 <?php
 
+/**
+ * Text.
+ */
+
 declare(strict_types = 1);
 
 namespace SEOCLI\Parser;
 
+/**
+ * Text.
+ */
 class Text implements PaserInterface
 {
     /**

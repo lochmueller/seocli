@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * RobotsTxt.
+ */
+
 declare(strict_types = 1);
 
 namespace SEOCLI;
@@ -8,7 +12,7 @@ use RobotsTxtParser;
 use SEOCLI\Traits\Cache;
 
 /**
- * Class RobotsTxt.
+ * RobotsTxt.
  */
 class RobotsTxt
 {

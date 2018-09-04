@@ -1,9 +1,16 @@
 <?php
 
+/**
+ * Interface PaserInterface.
+ */
+
 declare(strict_types = 1);
 
 namespace SEOCLI\Parser;
 
+/**
+ * Interface PaserInterface.
+ */
 interface PaserInterface
 {
     /**

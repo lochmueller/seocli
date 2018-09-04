@@ -1,11 +1,18 @@
 <?php
 
+/**
+ * Request.
+ */
+
 declare(strict_types = 1);
 
 namespace SEOCLI;
 
 use GuzzleHttp\Client;
 
+/**
+ * Request.
+ */
 class Request
 {
     /**

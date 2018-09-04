@@ -1,11 +1,18 @@
 <?php
 
+/**
+ * Uri.
+ */
+
 declare(strict_types = 1);
 
 namespace SEOCLI;
 
 use League\Uri\Http;
 
+/**
+ * Uri.
+ */
 class Uri
 {
     /**

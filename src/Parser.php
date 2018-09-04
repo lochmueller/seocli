@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Parser.
+ */
+
 declare(strict_types = 1);
 
 namespace SEOCLI;
@@ -10,6 +14,9 @@ use SEOCLI\Parser\PaserInterface;
 use SEOCLI\Parser\Text;
 use SEOCLI\Parser\Title;
 
+/**
+ * Parser.
+ */
 class Parser
 {
     /**

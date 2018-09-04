@@ -13,7 +13,10 @@ namespace SEOCLI\Output;
 interface OutputInterface
 {
     /**
+     * @param array $table
+     * @param array $topLists
+     *
      * @return string
      */
-    public function render(): string;
+    public function render(array $table, array $topLists = []): string;
 }

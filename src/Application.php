@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Application.
+ */
+
 declare(strict_types = 1);
 
 namespace SEOCLI;
@@ -7,6 +11,9 @@ namespace SEOCLI;
 use SEOCLI\Output\OutputInterface;
 use SEOCLI\Output\Text;
 
+/**
+ * Application.
+ */
 class Application
 {
     /**
@@ -119,16 +126,47 @@ class Application
     protected function renderOutput(array $uris): void
     {
         $format = $this->climate->arguments->get('format');
-
         $rendererName = Text::class;
         if (\class_exists('SEOCLI\\Output\\' . \ucfirst(\mb_strtolower($format)))) {
             $rendererName = 'SEOCLI\\Output\\' . \ucfirst(\mb_strtolower($format));
         }
         /** @var OutputInterface $renderer */
         $renderer = new $rendererName();
-        //echo $renderer->render();
-        // Output
 
+        $table = $this->getBaseTable($uris);
+
+        $topLists = [];
+
+        $limit = (int)$this->climate->arguments->get('topCount');
+        if ($limit) {
+            $topLists = [
+                'Slowest pages' => $this->sortAndLimitList($table, function ($a, $b) {
+                    return $a['timeInSeconds'] < $b['timeInSeconds'];
+                }),
+                'Biggest pages' => $this->sortAndLimitList($table, function ($a, $b) {
+                    return $a['documentSizeInMb'] < $b['documentSizeInMb'];
+                }),
+                'Shortest title' => $this->sortAndLimitList($table, function ($a, $b) {
+                    return $a['titleLength'] > $b['titleLength'];
+                }),
+                'Longest title' => $this->sortAndLimitList($table, function ($a, $b) {
+                    return $a['titleLength'] < $b['titleLength'];
+                }),
+                'Lowest textRatio' => $this->sortAndLimitList($table, function ($a, $b) {
+                    return $a['textRatio'] > $b['textRatio'];
+                }),
+            ];
+        }
+        echo $renderer->render($table, $topLists);
+    }
+
+    /**
+     * @param array $uris
+     *
+     * @return array
+     */
+    protected function getBaseTable(array $uris): array
+    {
         $table = [];
         foreach ($uris as $uri) {
             /* @var $uri Uri */
@@ -139,44 +177,22 @@ class Application
             return \strcmp($a['uri'], $b['uri']);
         });
 
-        $this->climate->blue('All result ' . \count($table) . ':');
-        $this->climate->table($table);
-
-        $limit = (int)$this->climate->arguments->get('topCount');
-        if ($limit) {
-            $this->renderTopList('Slowest pages', $table, function ($a, $b) {
-                return $a['timeInSeconds'] < $b['timeInSeconds'];
-            });
-
-            $this->renderTopList('Biggest pages', $table, function ($a, $b) {
-                return $a['documentSizeInMb'] < $b['documentSizeInMb'];
-            });
-
-            $this->renderTopList('Shortest title', $table, function ($a, $b) {
-                return $a['titleLength'] > $b['titleLength'];
-            });
-
-            $this->renderTopList('Longest title', $table, function ($a, $b) {
-                return $a['titleLength'] < $b['titleLength'];
-            });
-
-            $this->renderTopList('Lowest textRatio', $table, function ($a, $b) {
-                return $a['textRatio'] > $b['textRatio'];
-            });
-        }
+        return $table;
     }
 
     /**
      * @param $label
      * @param $data
      * @param callable $sortFunction
+     *
+     * @return array
      */
-    protected function renderTopList($label, $data, callable $sortFunction): void
+    protected function sortAndLimitList($data, callable $sortFunction): array
     {
         $limit = (int)$this->climate->arguments->get('topCount');
         \usort($data, $sortFunction);
-        $this->climate->red('Top ' . $limit . ': ' . $label);
-        $this->climate->table(\array_slice($data, 0, $limit));
+
+        return \array_slice($data, 0, $limit);
     }
 
     /**

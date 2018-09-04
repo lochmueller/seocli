@@ -1,9 +1,16 @@
 <?php
 
+/**
+ * Title.
+ */
+
 declare(strict_types = 1);
 
 namespace SEOCLI\Parser;
 
+/**
+ * Title.
+ */
 class Title implements PaserInterface
 {
     /**

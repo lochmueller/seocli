@@ -1,11 +1,15 @@
 <?php
 
+/**
+ * Headlines.
+ */
+
 declare(strict_types = 1);
 
 namespace SEOCLI\Parser;
 
 /**
- * Class Headlines.
+ * Headlines.
  */
 class Headlines implements PaserInterface
 {

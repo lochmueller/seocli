@@ -1,22 +1,38 @@
 <?php
 
-declare(strict_types = 1);
 /**
- * Created by PhpStorm.
- * User: tim
- * Date: 31.08.18
- * Time: 15:12.
+ * Text.
  */
+
+declare(strict_types = 1);
 
 namespace SEOCLI\Output;
 
+use SEOCLI\Cli;
+
+/**
+ * Text.
+ */
 class Text implements OutputInterface
 {
     /**
+     * @param array $table
+     * @param array $topLists
+     *
      * @return string
      */
-    public function render(): string
+    public function render(array $table, array $topLists = []): string
     {
-        return 'TXT';
+        $cli = Cli::getInstance();
+
+        $cli->blue('All result ' . \count($table) . ':');
+        $cli->table($table);
+
+        foreach ($topLists as $label => $innerTable) {
+            $cli->red('Top ' . \count($innerTable) . ': ' . $label);
+            $cli->table($innerTable);
+        }
+
+        return '';
     }
 }

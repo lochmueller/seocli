@@ -1,9 +1,16 @@
 <?php
 
+/**
+ * Links.
+ */
+
 declare(strict_types = 1);
 
 namespace SEOCLI\Parser;
 
+/**
+ * Links.
+ */
 class Links implements PaserInterface
 {
     /**
