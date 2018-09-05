@@ -8,7 +8,6 @@ declare(strict_types = 1);
 
 namespace SEOCLI;
 
-use League\Uri\Http;
 use SEOCLI\Traits\Singleton;
 
 /**
@@ -57,7 +56,7 @@ class Worker
                 $info = (array)$request->getMeta();
                 $content = $request->getContent();
                 $info['crawlDepth'] = $uri->getDepth();
-                $info['documentSizeInMb'] = \round(\mb_strlen($content) / 1024 / 1024, 2);
+                $info['documentSizeInMb'] = (new Format())->megaBytes(\mb_strlen($content));
 
                 $headers = $request->getHeader();
                 $info['contentType'] = isset($headers['Content-Type']) ? \implode('', $headers['Content-Type']) : '';
@@ -136,34 +135,17 @@ class Worker
     protected function cleanupLinksForWorker(Uri $uri, $links): array
     {
         $result = [];
-
         $alreadyQueued = \array_map(function ($uri) {
             return (string)$uri;
         }, self::$uris);
 
-        foreach ($links as $link) {
-            try {
-                $checkUri = Http::createFromString($link);
-            } catch (\Exception $ex) {
+        foreach ($uri->normalizeLinks($links) as $link) {
+            if (\in_array($link, $alreadyQueued, true)) {
                 continue;
             }
-            if ('' === (string)$checkUri->getHost()) {
-                $checkUri = $checkUri->withPath('/' . \ltrim($checkUri->getPath(), '/'));
-                $checkUri = $checkUri->withHost($uri->get()->getHost())->withScheme($uri->get()->getScheme());
-            }
-            $checkUri = $checkUri->withFragment('');
-
-            if ($uri->get()->getHost() !== $checkUri->getHost()) {
-                continue;
-            }
-
-            if (\in_array((string)$checkUri, $alreadyQueued, true)) {
-                continue;
-            }
-
-            $result[] = (string)$checkUri;
+            $result[] = $link;
         }
 
-        return \array_unique($result);
+        return $result;
     }
 }

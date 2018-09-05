@@ -22,39 +22,46 @@ class Xml implements OutputInterface
     public function render(array $table, array $topLists = []): string
     {
         $doc = new \DomDocument('1.0');
+        $doc->formatOutput = true;
 
         $root = $doc->createElement('seocli');
-        $root = $doc->appendChild($root);
+        $doc->appendChild($root);
 
-        $signed_values = ['a' => 'eee', 'b' => 'sd', 'c' => 'df'];
-
-        foreach ($signed_values as $key => $val) {
-            // add node for each row
-            $occ = $doc->createElement('error');
-            $occ = $root->appendChild($occ);
-            // add a child node for each field
-            foreach ($signed_values as $fieldname => $fieldvalue) {
-                $child = $doc->createElement($fieldname);
-                $child = $occ->appendChild($child);
-                $value = $doc->createTextNode($fieldvalue);
-                $value = $child->appendChild($value);
-            }
+        $all = $doc->createElement('all');
+        foreach ($table as $item) {
+            $all->appendChild($this->getItem($doc, $item));
         }
-        $xml_string = $doc->saveXML();
-        echo $xml_string;
+        $root->appendChild($all);
 
-        \var_dump($table);
-        \var_dump($topLists);
+        foreach ($topLists as $label => $values) {
+            $topList = $doc->createElement('topList');
+            $topList->setAttribute('label', $label);
+            foreach ($values as $item) {
+                $topList->appendChild($this->getItem($doc, $item));
+            }
+            $root->appendChild($topList);
+        }
 
-        return 'XML';
+        return $doc->saveXML();
     }
 
-    protected function getItem(\DomDocument $doc, $item)
+    /**
+     * Get item.
+     *
+     * @param array $item
+     *
+     * @return \DOMElement
+     */
+    protected function getItem(\DomDocument $doc, array $item): \DOMElement
     {
-        $item = $doc->createElement('item');
+        $element = $doc->createElement('item');
 
-        $result = ' On items';
+        foreach ($item as $key => $value) {
+            $inner = $doc->createElement($key);
+            $inner->nodeValue = (string)$value;
+            $element->appendChild($inner);
+        }
 
-        return $result;
+        return $element;
     }
 }

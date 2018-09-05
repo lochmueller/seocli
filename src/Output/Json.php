@@ -21,6 +21,11 @@ class Json implements OutputInterface
      */
     public function render(array $table, array $topLists = []): string
     {
-        return 'JSON';
+        $data = [
+            'all' => $table,
+            'topLists' => $topLists,
+        ];
+
+        return \json_encode($data);
     }
 }

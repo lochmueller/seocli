@@ -87,4 +87,37 @@ class Uri
     {
         return $this->depth;
     }
+
+    /**
+     * Migrate the links to absolute URIs, drop external and
+     * remove the fragment.
+     *
+     * @param array $links
+     *
+     * @return array
+     */
+    public function normalizeLinks(array $links)
+    {
+        $result = [];
+        foreach ($links as $link) {
+            try {
+                $checkUri = Http::createFromString($link);
+            } catch (\Exception $ex) {
+                continue;
+            }
+            if ('' === (string)$checkUri->getHost()) {
+                $checkUri = $checkUri->withPath('/' . \ltrim($checkUri->getPath(), '/'));
+                $checkUri = $checkUri->withHost($this->get()->getHost())->withScheme($this->get()->getScheme());
+            }
+            $checkUri = $checkUri->withFragment('');
+
+            if ($this->get()->getHost() !== $checkUri->getHost()) {
+                continue;
+            }
+
+            $result[] = (string)$checkUri;
+        }
+
+        return \array_unique($result);
+    }
 }
