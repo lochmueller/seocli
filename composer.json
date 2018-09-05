@@ -16,8 +16,8 @@
         "php": ">=7.1",
         "ext-dom": "*",
         "ext-pcntl": "*",
-        "guzzlehttp/guzzle": "^6.3",
-        "league/climate": "^3.4",
+        "guzzlehttp/guzzle": ">=5.3.3",
+        "league/climate": ">=3.3.0",
         "league/uri": "^5.3",
         "paquettg/php-html-parser": "^1.7",
         "t1gor/robots-txt-parser": "^0.2.4"
@@ -38,5 +38,8 @@
         "tool:phpmetrics": [
             "phpmetrics --report-html=build/metrics ."
         ]
-    }
+    },
+    "bin": [
+        "bin/seocli"
+    ]
 }
