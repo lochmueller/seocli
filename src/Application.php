@@ -17,6 +17,8 @@ use SEOCLI\Output\Text;
 class Application
 {
     /**
+     * CLI object.
+     *
      * @var Cli
      */
     protected $climate;
@@ -31,6 +33,9 @@ class Application
         $this->climate = Cli::getInstance();
     }
 
+    /**
+     * Run the application.
+     */
     public function run(): void
     {
         try {
@@ -42,6 +47,8 @@ class Application
     }
 
     /**
+     * Get finished worker.
+     *
      * @return Worker
      */
     protected function getFinishedWorker(): Worker
@@ -73,6 +80,8 @@ class Application
     }
 
     /**
+     * Render output.
+     *
      * @param array $uris
      */
     protected function renderOutput(array $uris): void
@@ -133,13 +142,14 @@ class Application
     }
 
     /**
-     * @param $label
-     * @param $data
+     * Sort and limit list.
+     *
+     * @param array    $data
      * @param callable $sortFunction
      *
      * @return array
      */
-    protected function sortAndLimitList($data, callable $sortFunction): array
+    protected function sortAndLimitList(array $data, callable $sortFunction): array
     {
         $limit = (int)$this->climate->arguments->get('topCount');
         \usort($data, $sortFunction);
@@ -148,7 +158,7 @@ class Application
     }
 
     /**
-     * signal handler.
+     * Signal handler.
      *
      * @param int $signal
      *

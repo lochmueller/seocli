@@ -1,18 +1,21 @@
 <?php
 
-declare(strict_types = 1);
 /**
- * Created by PhpStorm.
- * User: tim
- * Date: 31.08.18
- * Time: 15:13.
+ * Interface OutputInterface.
  */
+
+declare(strict_types = 1);
 
 namespace SEOCLI\Output;
 
+/**
+ * Interface OutputInterface.
+ */
 interface OutputInterface
 {
     /**
+     * Render.
+     *
      * @param array $table
      * @param array $topLists
      *

@@ -16,6 +16,8 @@ use SEOCLI\Cli;
 class Text implements OutputInterface
 {
     /**
+     * Render Text.
+     *
      * @param array $table
      * @param array $topLists
      *

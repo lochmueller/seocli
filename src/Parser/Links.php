@@ -14,6 +14,8 @@ namespace SEOCLI\Parser;
 class Links implements PaserInterface
 {
     /**
+     * Parse links.
+     *
      * @param \SEOCLI\Uri $uri
      * @param string      $content
      *

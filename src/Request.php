@@ -34,39 +34,50 @@ class Request
      */
     protected $result;
 
+    /**
+     * Request constructor.
+     *
+     * @param Uri $uri
+     */
     public function __construct(Uri $uri)
     {
         $this->uri = $uri;
     }
 
     /**
-     * @return mixed
+     * Get header.
+     *
+     * @return array
      */
-    public function getHeader()
+    public function getHeader(): array
     {
         $this->fetchResult();
 
-        return $this->result['header'];
+        return (array)$this->result['header'];
     }
 
     /**
-     * @return mixed
+     * Get content.
+     *
+     * @return string
      */
-    public function getContent()
+    public function getContent(): string
     {
         $this->fetchResult();
 
-        return $this->result['content'];
+        return (string)$this->result['content'];
     }
 
     /**
-     * @return mixed
+     * Get meta.
+     *
+     * @return array
      */
-    public function getMeta()
+    public function getMeta(): array
     {
         $this->fetchResult();
 
-        return $this->result['meta'];
+        return (array)$this->result['meta'];
     }
 
     /**

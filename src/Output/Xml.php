@@ -14,6 +14,8 @@ namespace SEOCLI\Output;
 class Xml implements OutputInterface
 {
     /**
+     * Render XML.
+     *
      * @param array $table
      * @param array $topLists
      *

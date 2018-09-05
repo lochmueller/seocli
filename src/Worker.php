@@ -18,16 +18,22 @@ class Worker
     use Singleton;
 
     /**
+     * URIs.
+     *
      * @var array
      */
     protected static $uris = [];
 
     /**
+     * Depth.
+     *
      * @var int
      */
     protected static $depth = 1;
 
     /**
+     * Add URI.
+     *
      * @param Uri $uri
      */
     public function add(Uri $uri): void
@@ -36,6 +42,8 @@ class Worker
     }
 
     /**
+     * Set depth.
+     *
      * @param int $depth
      */
     public function setDepth(int $depth): void
@@ -44,6 +52,8 @@ class Worker
     }
 
     /**
+     * Prefetch one.
+     *
      * @return bool|string
      */
     public function prefetchOne()
@@ -99,6 +109,8 @@ class Worker
     }
 
     /**
+     * Get open.
+     *
      * @return array
      */
     public function getOpen()
@@ -109,6 +121,8 @@ class Worker
     }
 
     /**
+     * Get fetched.
+     *
      * @return array
      */
     public function getFetched()
@@ -119,6 +133,8 @@ class Worker
     }
 
     /**
+     * Get.
+     *
      * @return array
      */
     public function get()
@@ -127,12 +143,14 @@ class Worker
     }
 
     /**
-     * @param Uri $uri
-     * @param $links
+     * Cleanup Links for worker.
+     *
+     * @param Uri   $uri
+     * @param array $links
      *
      * @return array
      */
-    protected function cleanupLinksForWorker(Uri $uri, $links): array
+    protected function cleanupLinksForWorker(Uri $uri, array $links): array
     {
         $result = [];
         $alreadyQueued = \array_map(function ($uri) {

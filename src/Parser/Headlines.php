@@ -19,6 +19,8 @@ class Headlines implements PaserInterface
     const REGEX = '/<h([1-5])[^>]*>(.*?)<\/h[0-5]>/';
 
     /**
+     * Parse headlines.
+     *
      * @param \SEOCLI\Uri $uri
      * @param string      $content
      *

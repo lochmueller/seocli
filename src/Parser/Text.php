@@ -14,6 +14,8 @@ namespace SEOCLI\Parser;
 class Text implements PaserInterface
 {
     /**
+     * Parse text.
+     *
      * @param \SEOCLI\Uri $uri
      * @param string      $content
      *

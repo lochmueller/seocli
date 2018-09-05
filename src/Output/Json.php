@@ -14,6 +14,8 @@ namespace SEOCLI\Output;
 class Json implements OutputInterface
 {
     /**
+     * Render JSON.
+     *
      * @param array $table
      * @param array $topLists
      *

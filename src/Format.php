@@ -20,7 +20,7 @@ class Format
      *
      * @return string
      */
-    public function megaBytes($bytes)
+    public function megaBytes($bytes): string
     {
         return \round(((float)$bytes) / 1024 / 1024, 2) . ' MB';
     }

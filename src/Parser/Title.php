@@ -14,6 +14,8 @@ namespace SEOCLI\Parser;
 class Title implements PaserInterface
 {
     /**
+     * parse title.
+     *
      * @param \SEOCLI\Uri $uri
      * @param string      $content
      *

@@ -14,10 +14,12 @@ namespace SEOCLI\Parser;
 interface PaserInterface
 {
     /**
+     * Parse.
+     *
      * @param \SEOCLI\Uri $uri
      * @param string      $content
      *
-     * @return mixed
+     * @return array
      */
     public function parse(\SEOCLI\Uri $uri, string $content): array;
 }
