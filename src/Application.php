@@ -42,7 +42,7 @@ class Application
             $worker = $this->getFinishedWorker();
             $this->renderOutput($worker->getFetched());
         } catch (\Exception $ex) {
-            $this->climate->error($ex->getMessage());
+            $this->climate->exception($ex);
         }
     }
 

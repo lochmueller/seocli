@@ -45,7 +45,7 @@ class Cli extends CLImate
             'format' => [
                 'prefix' => 'f',
                 'longPrefix' => 'format',
-                'description' => 'The format of the output [text,json,xml]',
+                'description' => 'The format of the output [text,json,xml,none]',
                 'required' => false,
                 'defaultValue' => 'text',
                 'castTo' => 'string',
@@ -63,8 +63,19 @@ class Cli extends CLImate
         try {
             $this->arguments->parse();
         } catch (\Exception $ex) {
+            $this->exception($ex);
             $this->usage();
             die();
         }
+    }
+
+    /**
+     * Render a exception.
+     *
+     * @param \Exception $exception
+     */
+    public function exception(\Exception $exception)
+    {
+        $this->error('Exception: ' . $exception->getMessage() . ' in ' . $exception->getFile() . ':' . $exception->getLine());
     }
 }

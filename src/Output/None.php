@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Json.
+ * None.
  */
 
 declare(strict_types = 1);
@@ -9,12 +9,12 @@ declare(strict_types = 1);
 namespace SEOCLI\Output;
 
 /**
- * Json.
+ * None.
  */
-class Json implements OutputInterface
+class None implements OutputInterface
 {
     /**
-     * Render JSON.
+     * Render None.
      *
      * @param array $table
      * @param array $topLists
@@ -23,11 +23,6 @@ class Json implements OutputInterface
      */
     public function render(array $table, array $topLists = []): string
     {
-        $data = [
-            'all' => $table,
-            'topLists' => $topLists,
-        ];
-
-        return \json_encode($data, JSON_PRETTY_PRINT);
+        return '';
     }
 }
