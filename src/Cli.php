@@ -45,7 +45,7 @@ class Cli extends CLImate
             'format' => [
                 'prefix' => 'f',
                 'longPrefix' => 'format',
-                'description' => 'The format of the output [text,json,xml,none]',
+                'description' => 'The format of the output [text,json,xml,csv,none]',
                 'required' => false,
                 'defaultValue' => 'text',
                 'castTo' => 'string',
