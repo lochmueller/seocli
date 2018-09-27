@@ -20,11 +20,13 @@
         "league/climate": ">=3.3.0",
         "league/uri": "^5.3",
         "paquettg/php-html-parser": "^1.7",
+        "seostats/seostats": "^2.5",
         "t1gor/robots-txt-parser": "^0.2.4"
     },
     "autoload": {
         "psr-4": {
-            "SEOCLI\\": "src/"
+            "SEOCLI\\": "src/",
+            "SEOstats\\": "vendor/seostats/seostats/SEOstats"
         }
     },
     "require-dev": {

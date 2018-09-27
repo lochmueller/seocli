@@ -23,9 +23,10 @@ trait Cache
     /**
      * Get the cache entry.
      *
-     * @param string $identifier
+     * @param string   $identifier
      * @param callable $callback
-     * @param int $time Time in seconds (0 = request based, <0 = force execution, >0 = seconds)
+     * @param int      $time       Time in seconds (0 = request based, <0 = force execution, >0 = seconds)
+     *
      * @return mixed
      */
     public function getCache(string $identifier, callable $callback, int $time = 0)

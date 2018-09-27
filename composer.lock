@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d4c2264c01c279a2c1f6f788c936dc99",
+    "content-hash": "2beb57457ddb677323254bd657ef522c",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -999,6 +999,50 @@
                 "prompt"
             ],
             "time": "2017-03-18T11:32:45+00:00"
+        },
+        {
+            "name": "seostats/seostats",
+            "version": "2.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eyecatchup/SEOstats.git",
+                "reference": "7b539a964f858fd579a9f31fada79f12118404f0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eyecatchup/SEOstats/zipball/7b539a964f858fd579a9f31fada79f12118404f0",
+                "reference": "7b539a964f858fd579a9f31fada79f12118404f0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.3"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stephan Schmitz",
+                    "email": "eyecatchup@gmail.com",
+                    "homepage": "https://github.com/eyecatchup",
+                    "role": "Creator, Developer, Maintainer"
+                }
+            ],
+            "description": "SEOstats is a powerful open source PHP library to request a bunch of SEO relevant metrics for any website.",
+            "homepage": "http://github.com/eyecatchup/SEOstats",
+            "keywords": [
+                "Alexa",
+                "Backlinks",
+                "Pagerank",
+                "SEMRush",
+                "bing",
+                "google",
+                "seo",
+                "seomoz"
+            ],
+            "time": "2013-08-17T04:39:33+00:00"
         },
         {
             "name": "t1gor/robots-txt-parser",

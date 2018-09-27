@@ -39,6 +39,7 @@
       <path value="$PROJECT_DIR$/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/vendor/vipnytt/useragentparser" />
       <path value="$PROJECT_DIR$/vendor/t1gor/robots-txt-parser" />
+      <path value="$PROJECT_DIR$/vendor/seostats/seostats" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.1" />
