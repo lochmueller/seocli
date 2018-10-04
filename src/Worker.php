@@ -90,13 +90,13 @@ class Worker
                 $info['wordCount'] = $parserResult['text']['wordCount'];
                 $info['textRatio'] = $parserResult['text']['textRatio'];
 
-
-                var_dump(class_exists(\Thread::class));die();
-                #define('SEOSTATSPATH', '..\\..\\..\\..\\..\\vendor\\seostats\\seostats\\SEOstats\\');
-                #$seoStats = new SEOstats((string)$uri);
-                #var_dump($seoStats->Sistrix()::getVisibilityIndex());
-                #var_dump($seoStats->Alexa()::getWeeklyRank());
-                #die();
+                \var_dump(\class_exists(\Thread::class));
+                die();
+                //define('SEOSTATSPATH', '..\\..\\..\\..\\..\\vendor\\seostats\\seostats\\SEOstats\\');
+                //$seoStats = new SEOstats((string)$uri);
+                //var_dump($seoStats->Sistrix()::getVisibilityIndex());
+                //var_dump($seoStats->Alexa()::getWeeklyRank());
+                //die();
 
                 $robotsTxt = new RobotsTxt();
                 $info['robotsTxt'] = $robotsTxt->status($uri);
