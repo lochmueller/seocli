@@ -1,14 +1,16 @@
 #!/usr/bin/env php
 <?php
-if (is_file(__DIR__ . '/../autoload.php')) {
-    require_once __DIR__ . '/../autoload.php';
-} elseif (is_file(__DIR__ . '/../vendor/autoload.php')) {
-    require_once __DIR__ . '/../vendor/autoload.php';
-} elseif (is_file(__DIR__ . '/../../autoload.php')) {
-    require_once __DIR__ . '/../../autoload.php';
-} elseif (is_file(__DIR__ . '/../../../autoload.php')) {
-    require_once __DIR__ . '/../../../autoload.php';
-} else {
-    die('Composer not found. Do you run `composer install`?');
+$base = __DIR__ . '/../';
+$loader = false;
+foreach ([$base . 'autoload.php',
+             $base . 'vendor/autoload.php',
+             $base . '../autoload.php',
+             $base . '../../autoload.php'] as $file) {
+    if (is_file($file)) {
+        $loader = include($file);
+        break;
+    }
 }
+
+$loader or die('Composer not found. Do you run `composer install`?');
 (new \SEOCLI\Application())->run();
