@@ -108,7 +108,7 @@ class Request
             $this->result = [
                 'meta' => [
                     'statusCode' => 'XX',
-                    'timeInSecods' => \round($stopTime - $startTime, 2),
+                    'timeInSeconds' => \round($stopTime - $startTime, 2),
                 ],
                 'header' => [],
                 'content' => '',
