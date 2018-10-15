@@ -29,6 +29,7 @@ class Application
     public function __construct()
     {
         \error_reporting(E_ALL);
+        \ini_set('display_errors', 'On');
         \pcntl_signal(SIGINT, [$this, 'signalHandler']);
         $this->climate = Cli::getInstance();
     }

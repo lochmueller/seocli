@@ -76,6 +76,14 @@ class Cli extends CLImate
      */
     public function exception(\Exception $exception)
     {
-        $this->error('Exception: ' . $exception->getMessage() . ' in ' . $exception->getFile() . ':' . $exception->getLine());
+        $this->br();
+        $this->red()->blink()->border('*', 30);
+        $this->red()->flank('Exception', '*');
+        $this->red()->blink()->border('*', 30);
+        $this->error('Message: ' . $exception->getMessage());
+        $this->error('File: ' . $exception->getFile());
+        $this->error('Line: ' . $exception->getLine());
+        $this->red()->blink()->border('*', 30);
+        $this->br();
     }
 }
