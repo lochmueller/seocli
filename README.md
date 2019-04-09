@@ -4,15 +4,16 @@ Scan websites against SEO criteria and/or trigger the indexing process and cache
 
 ## Usage
 
-### Composer
+### Composer project
 
 * Require lib ``composer require --dev lochmueller/seocli``
-* Run with ``./vendor/bin/seocli XXX``
+* Run with ``./vendor/bin/seocli ###ARGS###``
 
 ### Standalone
 
 * Clone repo ``git clone https://github.com/lochmueller/seocli.git``
-* Run with ``./bin/seocli XXX``
+* Load lib ``cd seocli && composer install``
+* Run with ``./bin/seocli ###ARGS###``
 
 ## Arguments
 
@@ -25,4 +26,4 @@ Scan websites against SEO criteria and/or trigger the indexing process and cache
 
 Get information from www.website.de with depth 1 as CSV format: 
 
-``./bin/seocli -u https://www.website.de -d 1 -f csv``
+``###PATH###/seocli -u https://www.website.de -d 1 -f csv``
