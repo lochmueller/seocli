@@ -34,7 +34,7 @@ class Csv implements OutputInterface
         }
 
         // php://memory
-        $fp = \fopen('php://output', 'wb');
+        $fp = \fopen('php://output', 'w');
         foreach ($allTable as $fields) {
             \fputcsv($fp, $fields);
         }
