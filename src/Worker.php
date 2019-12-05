@@ -171,6 +171,11 @@ class Worker
             $result[] = $link;
         }
 
+        $result = \array_filter($result, function($item){
+            $extension = \pathinfo($item, PATHINFO_EXTENSION);
+            return !\in_array($extension, ['jpg', 'jpeg', 'bmp', 'gif', 'pdf', 'mp4', 'mp3', 'mov']);
+        });
+
         return $result;
     }
 }
