@@ -4,7 +4,7 @@
  * Links.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SEOCLI\Parser;
 
@@ -15,11 +15,6 @@ class Links implements PaserInterface
 {
     /**
      * Parse links.
-     *
-     * @param \SEOCLI\Uri $uri
-     * @param string      $content
-     *
-     * @return array
      */
     public function parse(\SEOCLI\Uri $uri, string $content): array
     {
@@ -37,7 +32,7 @@ class Links implements PaserInterface
         //Iterate over the extracted links and display their URLs
         $result = [];
         foreach ($links as $link) {
-            $result[] = (string)$link->getAttribute('href');
+            $result[] = (string) $link->getAttribute('href');
         }
 
         return $result;

@@ -4,7 +4,7 @@
  * Interface OutputInterface.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SEOCLI\Output;
 
@@ -15,11 +15,6 @@ interface OutputInterface
 {
     /**
      * Render.
-     *
-     * @param array $table
-     * @param array $topLists
-     *
-     * @return string
      */
     public function render(array $table, array $topLists = []): string;
 }

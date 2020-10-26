@@ -4,7 +4,7 @@
  * Parser.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SEOCLI;
 
@@ -21,24 +21,17 @@ class Parser
 {
     /**
      * Get the parser results.
-     *
-     * @param Uri    $uri
-     * @param string $content
-     *
-     * @return array
      */
     public function parseAll(Uri $uri, string $content): array
     {
-        return \array_map(function ($parser) use ($uri, $content) {
-            /* @var $parser PaserInterface */
+        return array_map(function ($parser) use ($uri, $content) {
+            // @var $parser PaserInterface
             return $parser->parse($uri, $content);
         }, $this->getParser());
     }
 
     /**
      * Get parser.
-     *
-     * @return array
      */
     protected function getParser(): array
     {

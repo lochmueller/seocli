@@ -4,7 +4,7 @@
  * Cli.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SEOCLI;
 
@@ -71,18 +71,16 @@ class Cli extends CLImate
 
     /**
      * Render a exception.
-     *
-     * @param \Exception $exception
      */
-    public function exception(\Exception $exception)
+    public function exception(\Exception $exception): void
     {
         $this->br();
         $this->red()->blink()->border('*', 30);
         $this->red()->flank('Exception', '*');
         $this->red()->blink()->border('*', 30);
-        $this->error('Message: ' . $exception->getMessage());
-        $this->error('File: ' . $exception->getFile());
-        $this->error('Line: ' . $exception->getLine());
+        $this->error('Message: '.$exception->getMessage());
+        $this->error('File: '.$exception->getFile());
+        $this->error('Line: '.$exception->getLine());
         $this->red()->blink()->border('*', 30);
         $this->br();
     }

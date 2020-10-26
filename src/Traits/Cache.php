@@ -4,7 +4,7 @@
  * Trait Cache.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SEOCLI\Traits;
 
@@ -23,9 +23,7 @@ trait Cache
     /**
      * Get the cache entry.
      *
-     * @param string   $identifier
-     * @param callable $callback
-     * @param int      $time       Time in seconds (0 = request based, <0 = force execution, >0 = seconds)
+     * @param int $time Time in seconds (0 = request based, <0 = force execution, >0 = seconds)
      *
      * @return mixed
      */
@@ -41,10 +39,6 @@ trait Cache
 
     /**
      * Check if there is a cache entry.
-     *
-     * @param string $identifier
-     *
-     * @return bool
      */
     public function hasCache(string $identifier): bool
     {

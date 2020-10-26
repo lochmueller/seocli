@@ -4,7 +4,7 @@
  * Xml.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SEOCLI\Output;
 
@@ -15,11 +15,6 @@ class Xml implements OutputInterface
 {
     /**
      * Render XML.
-     *
-     * @param array $table
-     * @param array $topLists
-     *
-     * @return string
      */
     public function render(array $table, array $topLists = []): string
     {
@@ -49,10 +44,6 @@ class Xml implements OutputInterface
 
     /**
      * Get item.
-     *
-     * @param array $item
-     *
-     * @return \DOMElement
      */
     protected function getItem(\DomDocument $doc, array $item): \DOMElement
     {
@@ -60,7 +51,7 @@ class Xml implements OutputInterface
 
         foreach ($item as $key => $value) {
             $inner = $doc->createElement($key);
-            $inner->nodeValue = (string)$value;
+            $inner->nodeValue = (string) $value;
             $element->appendChild($inner);
         }
 

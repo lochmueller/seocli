@@ -4,7 +4,7 @@
  * Worker.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SEOCLI;
 
@@ -34,8 +34,6 @@ class Worker
 
     /**
      * Add URI.
-     *
-     * @param Uri $uri
      */
     public function add(Uri $uri): void
     {
@@ -44,8 +42,6 @@ class Worker
 
     /**
      * Set depth.
-     *
-     * @param int $depth
      */
     public function setDepth(int $depth): void
     {
@@ -60,17 +56,17 @@ class Worker
     public function prefetchOne()
     {
         foreach (self::$uris as $key => $uri) {
-            /** @var $uri Uri */
+            /** @var Uri $uri */
             if (null === $uri->getInfo()) {
                 $request = new Request($uri);
 
-                $info = (array)$request->getMeta();
+                $info = (array) $request->getMeta();
                 $content = $request->getContent();
                 $info['crawlDepth'] = $uri->getDepth();
-                $info['documentSizeInMb'] = (new Format())->megaBytes(\mb_strlen($content));
+                $info['documentSizeInMb'] = (new Format())->megaBytes(mb_strlen($content));
 
                 $headers = $request->getHeader();
-                $info['contentType'] = isset($headers['Content-Type']) ? \implode('', $headers['Content-Type']) : '';
+                $info['contentType'] = isset($headers['Content-Type']) ? implode('', $headers['Content-Type']) : '';
                 // $infos['content'] = $request->getContent();
                 // $infos['header'] = $request->getHeader();
 
@@ -108,7 +104,7 @@ class Worker
                     }
                 }
 
-                return (string)$uri . ' (' . $uri->getDepth() . ')';
+                return (string) $uri.' ('.$uri->getDepth().')';
             }
         }
 
@@ -122,7 +118,7 @@ class Worker
      */
     public function getOpen()
     {
-        return \array_filter(self::$uris, function (Uri $uri) {
+        return array_filter(self::$uris, function (Uri $uri) {
             return null === $uri->getInfo();
         });
     }
@@ -134,7 +130,7 @@ class Worker
      */
     public function getFetched()
     {
-        return \array_filter(self::$uris, function (Uri $uri) {
+        return array_filter(self::$uris, function (Uri $uri) {
             return null !== $uri->getInfo();
         });
     }
@@ -151,17 +147,12 @@ class Worker
 
     /**
      * Cleanup Links for worker.
-     *
-     * @param Uri   $uri
-     * @param array $links
-     *
-     * @return array
      */
     protected function cleanupLinksForWorker(Uri $uri, array $links): array
     {
         $result = [];
-        $alreadyQueued = \array_map(function ($uri) {
-            return (string)$uri;
+        $alreadyQueued = array_map(function ($uri) {
+            return (string) $uri;
         }, self::$uris);
 
         foreach ($uri->normalizeLinks($links) as $link) {
@@ -171,11 +162,10 @@ class Worker
             $result[] = $link;
         }
 
-        $result = \array_filter($result, function($item){
-            $extension = \pathinfo($item, PATHINFO_EXTENSION);
-            return !\in_array($extension, ['jpg', 'jpeg', 'bmp', 'gif', 'pdf', 'mp4', 'mp3', 'mov']);
-        });
+        return array_filter($result, function ($item) {
+            $extension = pathinfo($item, PATHINFO_EXTENSION);
 
-        return $result;
+            return !\in_array($extension, ['jpg', 'jpeg', 'bmp', 'gif', 'pdf', 'mp4', 'mp3', 'mov'], true);
+        });
     }
 }

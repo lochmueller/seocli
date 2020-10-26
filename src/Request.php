@@ -4,7 +4,7 @@
  * Request.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SEOCLI;
 
@@ -18,7 +18,7 @@ class Request
     /**
      * User agent.
      */
-    const USER_AGENT = 'CERN-LineMode/2.15';
+    public const USER_AGENT = 'CERN-LineMode/2.15';
 
     /**
      * URI.
@@ -36,8 +36,6 @@ class Request
 
     /**
      * Request constructor.
-     *
-     * @param Uri $uri
      */
     public function __construct(Uri $uri)
     {
@@ -46,69 +44,64 @@ class Request
 
     /**
      * Get header.
-     *
-     * @return array
      */
     public function getHeader(): array
     {
         $this->fetchResult();
 
-        return (array)$this->result['header'];
+        return (array) $this->result['header'];
     }
 
     /**
      * Get content.
-     *
-     * @return string
      */
     public function getContent(): string
     {
         $this->fetchResult();
 
-        return (string)$this->result['content'];
+        return (string) $this->result['content'];
     }
 
     /**
      * Get meta.
-     *
-     * @return array
      */
     public function getMeta(): array
     {
         $this->fetchResult();
 
-        return (array)$this->result['meta'];
+        return (array) $this->result['meta'];
     }
 
     /**
      * Fetch result.
      */
-    protected function fetchResult()
+    protected function fetchResult(): void
     {
         if (null !== $this->result) {
             return;
         }
 
-        $startTime = \microtime(true);
+        $startTime = microtime(true);
+
         try {
             $client = $this->getClient();
-            $res = $client->request('GET', (string)$this->uri);
-            $stopTime = \microtime(true);
+            $res = $client->request('GET', (string) $this->uri);
+            $stopTime = microtime(true);
 
             $this->result = [
                 'meta' => [
                     'statusCode' => $res->getStatusCode(),
-                    'timeInSeconds' => \round($stopTime - $startTime, 2),
+                    'timeInSeconds' => round($stopTime - $startTime, 2),
                 ],
                 'header' => $res->getHeaders(),
-                'content' => (string)$res->getBody(),
+                'content' => (string) $res->getBody(),
             ];
         } catch (\Exception $ex) {
-            $stopTime = \microtime(true);
+            $stopTime = microtime(true);
             $this->result = [
                 'meta' => [
                     'statusCode' => 'XX',
-                    'timeInSeconds' => \round($stopTime - $startTime, 2),
+                    'timeInSeconds' => round($stopTime - $startTime, 2),
                 ],
                 'header' => [],
                 'content' => '',
@@ -118,13 +111,12 @@ class Request
 
     /**
      * Get connection client.
-     *
-     * @return Client
      */
     protected function getClient(): Client
     {
         $jar = new \GuzzleHttp\Cookie\CookieJar();
-        $client = new Client([
+
+        return new Client([
             'cookies' => $jar,
             'headers' => [
                 'User-Agent' => self::USER_AGENT,
@@ -133,7 +125,5 @@ class Request
                 'Accept-Language' => 'en-US,en;q=0.8',
             ],
         ]);
-
-        return $client;
     }
 }

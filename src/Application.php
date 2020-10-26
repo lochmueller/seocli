@@ -4,7 +4,7 @@
  * Application.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SEOCLI;
 
@@ -28,9 +28,9 @@ class Application
      */
     public function __construct()
     {
-        \error_reporting(-1);
-        \ini_set('display_errors', 'On');
-        \pcntl_signal(SIGINT, [$this, 'signalHandler']);
+        error_reporting(-1);
+        ini_set('display_errors', 'On');
+        pcntl_signal(SIGINT, [$this, 'signalHandler']);
         $this->climate = Cli::getInstance();
     }
 
@@ -49,8 +49,6 @@ class Application
 
     /**
      * Get finished worker.
-     *
-     * @return Worker
      */
     protected function getFinishedWorker(): Worker
     {
@@ -65,9 +63,10 @@ class Application
             $progress = $this->climate->progress(\count($worker->get()));
             $progress->current(0);
         }
+
         try {
             while ($currentUri = $worker->prefetchOne()) {
-                \pcntl_signal_dispatch();
+                pcntl_signal_dispatch();
                 if ('text' === $format) {
                     $progress->current(\count($worker->getFetched()), $currentUri);
                     $progress->total(\count($worker->get()));
@@ -82,15 +81,13 @@ class Application
 
     /**
      * Render output.
-     *
-     * @param array $uris
      */
     protected function renderOutput(array $uris): void
     {
         $format = $this->climate->arguments->get('format');
         $rendererName = Text::class;
-        if (\class_exists('SEOCLI\\Output\\' . \ucfirst(\mb_strtolower($format)))) {
-            $rendererName = 'SEOCLI\\Output\\' . \ucfirst(\mb_strtolower($format));
+        if (class_exists('SEOCLI\\Output\\'.ucfirst(mb_strtolower($format)))) {
+            $rendererName = 'SEOCLI\\Output\\'.ucfirst(mb_strtolower($format));
         }
         /** @var OutputInterface $renderer */
         $renderer = new $rendererName();
@@ -99,7 +96,7 @@ class Application
 
         $topLists = [];
 
-        $limit = (int)$this->climate->arguments->get('topCount');
+        $limit = (int) $this->climate->arguments->get('topCount');
         if ($limit) {
             $topLists = [
                 'Slowest pages' => $this->sortAndLimitList($table, function ($a, $b) {
@@ -122,21 +119,16 @@ class Application
         echo $renderer->render($table, $topLists);
     }
 
-    /**
-     * @param array $uris
-     *
-     * @return array
-     */
     protected function getBaseTable(array $uris): array
     {
         $table = [];
         foreach ($uris as $uri) {
-            /* @var $uri Uri */
-            $table[] = ['uri' => (string)$uri] + $uri->getInfo();
+            // @var $uri Uri
+            $table[] = ['uri' => (string) $uri] + $uri->getInfo();
         }
 
-        \usort($table, function ($a, $b) {
-            return \strcmp($a['uri'], $b['uri']);
+        usort($table, function ($a, $b) {
+            return strcmp($a['uri'], $b['uri']);
         });
 
         return $table;
@@ -144,16 +136,11 @@ class Application
 
     /**
      * Sort and limit list.
-     *
-     * @param array    $data
-     * @param callable $sortFunction
-     *
-     * @return array
      */
     protected function sortAndLimitList(array $data, callable $sortFunction): array
     {
-        $limit = (int)$this->climate->arguments->get('topCount');
-        \usort($data, $sortFunction);
+        $limit = (int) $this->climate->arguments->get('topCount');
+        usort($data, $sortFunction);
 
         return \array_slice($data, 0, $limit);
     }
@@ -161,12 +148,10 @@ class Application
     /**
      * Signal handler.
      *
-     * @param int $signal
-     *
      * @throws InterruptException
      */
     protected function signalHandler(int $signal): void
     {
-        throw new InterruptException('Trigger Signal: ' . $signal);
+        throw new InterruptException('Trigger Signal: '.$signal);
     }
 }

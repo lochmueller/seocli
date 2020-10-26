@@ -4,7 +4,7 @@
  * Uri.
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace SEOCLI;
 
@@ -18,7 +18,7 @@ class Uri
     /**
      * URI object.
      *
-     * @var \League\Uri\AbstractUri|Http
+     * @var Http|\League\Uri\AbstractUri
      */
     protected $uri;
 
@@ -38,9 +38,6 @@ class Uri
 
     /**
      * Uri constructor.
-     *
-     * @param string $uri
-     * @param int    $depth
      */
     public function __construct(string $uri, int $depth = 0)
     {
@@ -48,16 +45,13 @@ class Uri
         $this->depth = $depth;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
-        return (string)$this->uri;
+        return (string) $this->uri;
     }
 
     /**
-     * @return \League\Uri\AbstractUri|Http
+     * @return Http|\League\Uri\AbstractUri
      */
     public function get()
     {
@@ -72,17 +66,11 @@ class Uri
         return $this->info;
     }
 
-    /**
-     * @param array $info
-     */
-    public function setInfo(array $info)
+    public function setInfo(array $info): void
     {
         $this->info = $info;
     }
 
-    /**
-     * @return int
-     */
     public function getDepth(): int
     {
         return $this->depth;
@@ -91,8 +79,6 @@ class Uri
     /**
      * Migrate the links to absolute URIs, drop external and
      * remove the fragment.
-     *
-     * @param array $links
      *
      * @return array
      */
@@ -105,8 +91,8 @@ class Uri
             } catch (\Exception $ex) {
                 continue;
             }
-            if ('' === (string)$checkUri->getHost()) {
-                $checkUri = $checkUri->withPath('/' . \ltrim($checkUri->getPath(), '/'));
+            if ('' === (string) $checkUri->getHost()) {
+                $checkUri = $checkUri->withPath('/'.ltrim($checkUri->getPath(), '/'));
                 $checkUri = $checkUri->withHost($this->get()->getHost())->withScheme($this->get()->getScheme());
             }
             $checkUri = $checkUri->withFragment('');
@@ -115,9 +101,9 @@ class Uri
                 continue;
             }
 
-            $result[] = (string)$checkUri;
+            $result[] = (string) $checkUri;
         }
 
-        return \array_unique($result);
+        return array_unique($result);
     }
 }
