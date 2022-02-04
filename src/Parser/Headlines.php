@@ -16,7 +16,7 @@ class Headlines implements PaserInterface
     /**
      * Search Regex.
      */
-    public const REGEX = '/<h([1-5])[^>]*>(.*?)<\/h[0-5]>/';
+    public const REGEX = '/<h([1-5])[^>]*>(.*?)<\/h\1>/';
 
     /**
      * Parse headlines.
