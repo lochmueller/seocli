@@ -30,9 +30,13 @@ class Links implements PaserInterface
         $links = $dom->getElementsByTagName('a');
 
         //Iterate over the extracted links and display their URLs
+        //https://www.iana.org/assignments/uri-schemes/uri-schemes.xhtml
         $result = [];
         foreach ($links as $link) {
-            $result[] = (string) $link->getAttribute('href');
+            $href = (string) $link->getAttribute('href');
+            if(false === preg_match('/^([a-z]+)s?\:/', $href, $match) || 'http' == $match[1]) {
+                $result[] = $href;
+            }
         }
 
         return $result;
