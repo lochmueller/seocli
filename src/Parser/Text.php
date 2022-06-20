@@ -18,7 +18,7 @@ class Text implements PaserInterface
      */
     public function parse(\SEOCLI\Uri $uri, string $content): array
     {
-        $text = preg_replace('/<script(.*?)<\/script>/is', '', $content);
+        $text = preg_replace('/<script(.+?)<\/script>/is', '', $content);
         $text = strip_tags($text);
 
         $contentLength = mb_strlen($content);
