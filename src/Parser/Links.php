@@ -34,7 +34,7 @@ class Links implements PaserInterface
         $result = [];
         foreach ($links as $link) {
             $href = (string) $link->getAttribute('href');
-            if('#' == $href[0] || preg_match('/^([a-z]+?)s?\:/', $href, $match) && 'http' != $match[1]) {
+            if('#' === $href[0] || preg_match('/^([a-z]+?)s?\:/', $href, $match) && 'http' !== $match[1]) {
                 continue;
             }
             $result[] = $href;

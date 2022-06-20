@@ -91,7 +91,7 @@ class Uri
             } catch (\Exception $ex) {
                 continue;
             }
-            if ('' === (string) $checkUri->getHost()) {
+            if ('' === (string) $checkUri->getHost() && '/' !== $checkUri->getPath()) {
                 $checkUri = $checkUri->withPath('/'.ltrim($checkUri->getPath(), '/'));
                 $checkUri = $checkUri->withHost($this->get()->getHost())->withScheme($this->get()->getScheme());
             }
