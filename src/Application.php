@@ -100,19 +100,19 @@ class Application
         if ($limit) {
             $topLists = [
                 'Slowest pages' => $this->sortAndLimitList($table, function ($a, $b) {
-                    return $a['timeInSeconds'] < $b['timeInSeconds'];
+                    return ($a['timeInSeconds'] <=> $b['timeInSeconds']) * -1;
                 }),
                 'Biggest pages' => $this->sortAndLimitList($table, function ($a, $b) {
-                    return $a['documentSizeInMb'] < $b['documentSizeInMb'];
+                    return ($a['documentSizeInMb'] <=> $b['documentSizeInMb']) * -1;
                 }),
                 'Shortest title' => $this->sortAndLimitList($table, function ($a, $b) {
-                    return $a['titleLength'] > $b['titleLength'];
+                    return $a['titleLength'] <=> $b['titleLength'];
                 }),
                 'Longest title' => $this->sortAndLimitList($table, function ($a, $b) {
-                    return $a['titleLength'] < $b['titleLength'];
+                    return ($a['titleLength'] <=> $b['titleLength']) * -1;
                 }),
                 'Lowest textRatio' => $this->sortAndLimitList($table, function ($a, $b) {
-                    return $a['textRatio'] > $b['textRatio'];
+                    return $a['textRatio'] <=> $b['textRatio'];
                 }),
             ];
         }
