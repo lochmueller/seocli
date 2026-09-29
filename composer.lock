@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "be7ee9009f8a337e67c60396023d83c1",
+    "content-hash": "2e65b1af07dea40f19742eb7158ee81e",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -1011,16 +1011,16 @@
         },
         {
             "name": "psr/log",
-            "version": "3.0.0",
+            "version": "3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "fe5ea303b0887d5caefd3d431c3e61ad47037001"
+                "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/fe5ea303b0887d5caefd3d431c3e61ad47037001",
-                "reference": "fe5ea303b0887d5caefd3d431c3e61ad47037001",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
+                "reference": "f16e1d5863e37f8d8c2a01719f5b34baa2b714d3",
                 "shasum": ""
             },
             "require": {
@@ -1055,9 +1055,9 @@
                 "psr-3"
             ],
             "support": {
-                "source": "https://github.com/php-fig/log/tree/3.0.0"
+                "source": "https://github.com/php-fig/log/tree/3.0.2"
             },
-            "time": "2021-07-14T16:46:02+00:00"
+            "time": "2024-09-11T13:17:53+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -1275,32 +1275,35 @@
         },
         {
             "name": "t1gor/robots-txt-parser",
-            "version": "v0.2.5",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/t1gor/Robots.txt-Parser-Class.git",
-                "reference": "ac4159089c1a01b64db070f1240427bba2333040"
+                "reference": "51ca974c415c0cc5092f089fdb2457ae9dffb2a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/t1gor/Robots.txt-Parser-Class/zipball/ac4159089c1a01b64db070f1240427bba2333040",
-                "reference": "ac4159089c1a01b64db070f1240427bba2333040",
+                "url": "https://api.github.com/repos/t1gor/Robots.txt-Parser-Class/zipball/51ca974c415c0cc5092f089fdb2457ae9dffb2a6",
+                "reference": "51ca974c415c0cc5092f089fdb2457ae9dffb2a6",
                 "shasum": ""
             },
             "require": {
+                "ext-iconv": "*",
                 "ext-mbstring": "*",
-                "php": ">=5.5.0",
+                "php": ">=8.2",
+                "psr/log": "^1.1 || ^2.0 || ^3.0",
                 "vipnytt/useragentparser": "^1.0"
             },
             "require-dev": {
-                "codeclimate/php-test-reporter": ">=0.2",
-                "phpunit/phpunit": "~3.7"
+                "ext-json": "*",
+                "monolog/monolog": "^3.0",
+                "phpunit/phpunit": "^9"
             },
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "source/robotstxtparser.php"
-                ]
+                "psr-4": {
+                    "t1gor\\RobotsTxtParser\\": "source"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1330,22 +1333,22 @@
             ],
             "support": {
                 "issues": "https://github.com/t1gor/Robots.txt-Parser-Class/issues",
-                "source": "https://github.com/t1gor/Robots.txt-Parser-Class/tree/v0.2.5"
+                "source": "https://github.com/t1gor/Robots.txt-Parser-Class/tree/v1.0.0"
             },
-            "time": "2020-09-12T12:21:10+00:00"
+            "time": "2026-09-25T09:43:27+00:00"
         },
         {
             "name": "vipnytt/useragentparser",
-            "version": "v1.0.5",
+            "version": "v1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/VIPnytt/UserAgentParser.git",
-                "reference": "da4b9ddee37c46d8c184a0a931b014b1674d973b"
+                "reference": "8eae23066be787dd0efb56ac933cfe98177049f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/VIPnytt/UserAgentParser/zipball/da4b9ddee37c46d8c184a0a931b014b1674d973b",
-                "reference": "da4b9ddee37c46d8c184a0a931b014b1674d973b",
+                "url": "https://api.github.com/repos/VIPnytt/UserAgentParser/zipball/8eae23066be787dd0efb56ac933cfe98177049f6",
+                "reference": "8eae23066be787dd0efb56ac933cfe98177049f6",
                 "shasum": ""
             },
             "require": {
@@ -1397,7 +1400,7 @@
                 "source": "https://github.com/VIPnytt/UserAgentParser",
                 "wiki": "https://github.com/VIPnytt/UserAgentParser/wiki"
             },
-            "time": "2021-04-04T16:09:54+00:00"
+            "time": "2025-02-21T15:01:09+00:00"
         }
     ],
     "packages-dev": [
@@ -3216,14 +3219,14 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.1",
+        "php": "^8.2",
         "ext-dom": "*",
         "ext-pcntl": "*"
     },
-    "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "platform-dev": {},
+    "plugin-api-version": "2.9.0"
 }

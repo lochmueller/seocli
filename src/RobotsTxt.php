@@ -8,8 +8,8 @@ declare(strict_types=1);
 
 namespace SEOCLI;
 
-use RobotsTxtParser;
 use SEOCLI\Traits\Cache;
+use t1gor\RobotsTxtParser\RobotsTxtParser;
 
 /**
  * RobotsTxt.
@@ -23,13 +23,11 @@ class RobotsTxt
         $host = $uri->get()->getHost();
         $parser = $this->getCache($host, function () use ($uri) {
             $robotsTxt = new self();
-            $parser = new RobotsTxtParser($robotsTxt->getRobotsTxtContent($uri));
-            $parser->setUserAgent(Request::USER_AGENT);
 
-            return $parser;
+            return (new RobotsTxtParser())->setContent($robotsTxt->getRobotsTxtContent($uri));
         });
 
-        return $parser->isDisallowed($uri->get()->getPath()) ? 'XX' : 'OK';
+        return $parser->isDisallowed($uri->get()->getPath(), Request::USER_AGENT) ? 'XX' : 'OK';
     }
 
     public function getRobotsTxtContent(Uri $uri): string
