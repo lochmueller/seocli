@@ -13,7 +13,7 @@
         "optimize-autoloader": true
     },
     "require": {
-        "php": "^8.1",
+        "php": "^8.2",
         "ext-dom": "*",
         "ext-pcntl": "*",
         "guzzlehttp/guzzle": "^7.2",
@@ -21,7 +21,7 @@
         "league/uri": "^7.4",
         "paquettg/php-html-parser": "^3.1",
         "seostats/seostats": "^2.5",
-        "t1gor/robots-txt-parser": "^0.2.4"
+        "t1gor/robots-txt-parser": "^1.0"
     },
     "autoload": {
         "psr-4": {
